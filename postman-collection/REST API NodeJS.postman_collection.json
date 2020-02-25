@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b59237a7-b99e-401e-b0c6-39203c202949",
+		"_postman_id": "24c457ae-83f2-4222-a5d4-f28e306ed126",
 		"name": "REST API NodeJS",
 		"description": "A boilerplate for REST API Development with Node.js and Expressjs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -26,22 +26,46 @@
 							"urlencoded": [
 								{
 									"key": "firstName",
-									"value": "test",
+									"value": "Gordon",
 									"type": "text"
 								},
 								{
 									"key": "lastName",
-									"value": "testing",
+									"value": "Freeman",
 									"type": "text"
 								},
 								{
-									"key": "password",
-									"value": "Test@123",
+									"key": "address",
+									"value": "",
+									"description": "(not required)",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "",
+									"description": "(not required)",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "",
+									"description": "(not required)",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "",
+									"description": "(not required)",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "test@testing.com",
+									"value": "jeremy.agrezio@orange.fr",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Azerty",
 									"type": "text"
 								}
 							]
@@ -192,26 +216,27 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Book",
+			"name": "Rent",
 			"item": [
 				{
-					"name": "Book Store",
+					"name": "Rent Register",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"type": "text"
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0NzI1NTMxLCJleHAiOjE1NjQ3MzI3MzF9.YEGMugzT_ijNgAeBYe4O6hZoidkG_hX9x-1QjQKuJYI",
-								"type": "text"
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQwNjM2OCwiZXhwIjoxNTgyNDkyNzY4fQ._oPA5v8Ef9oI2sdQSMnWghPDxBy9JSCl53l02MaFkB4"
 							}
 						],
 						"body": {
@@ -219,23 +244,53 @@
 							"urlencoded": [
 								{
 									"key": "title",
-									"value": "testing book ",
+									"value": "Great appartment",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "testing book desc",
+									"value": "Nullam non purus vel mi consectetur laoreet. Ut dictum commodo orci, sit amet posuere leo tincidunt sed. Nulla nibh diam, facilisis nec arcu non, tempor tincidunt nunc. Quisque egestas ut turpis id pharetra. ",
 									"type": "text"
 								},
 								{
-									"key": "isbn",
-									"value": "3214htrff4",
+									"key": "capacity",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "124",
+									"type": "text"
+								},
+								{
+									"key": "area",
+									"value": "40",
+									"type": "text"
+								},
+								{
+									"key": "pictures",
+									"value": "[]",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "221B Baker Street",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "London",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Great Britain",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/book",
+							"raw": "http://localhost:3000/api/rent",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -243,25 +298,25 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"book"
+								"rent"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Book List",
+					"name": "Rent List",
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0NzQ0NzQ4LCJleHAiOjE1NjQ3NTE5NDh9.gE2DjhWgNmPFyy7K21MEC4bIm3gbbDicdE_eorFIZ0o",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1NjY1NSwiZXhwIjoxNTgyNTQzMDU1fQ.3GRv7lGKwCMQV6ma2sHs4rsu2kgLQGsE3QXI2c42CEs",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/book",
+							"raw": "http://localhost:3000/api/rent",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -269,25 +324,25 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"book"
+								"rent"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Book Detail",
+					"name": "Rent Detail",
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0NzQ0NzQ4LCJleHAiOjE1NjQ3NTE5NDh9.gE2DjhWgNmPFyy7K21MEC4bIm3gbbDicdE_eorFIZ0o",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1MjI1NSwiZXhwIjoxNTgyNTM4NjU1fQ.hdkhg5zyulSwMdo9hU_Fih3V7uMb_joGcyUzhNGqgMo",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/book/5d43d14a246036209713e667",
+							"raw": "http://localhost:3000/api/rent/5e519b7936ccec3715e099b7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -295,28 +350,28 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"book",
-								"5d43d14a246036209713e667"
+								"rent",
+								"5e519b7936ccec3715e099b7"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Book Update",
+					"name": "Rent Update",
 					"request": {
 						"method": "PUT",
 						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0OTkzMDgwLCJleHAiOjE1NjUwMDAyODB9.Lm0-ociCVNxhL7rnzeCO9i1mmJx1bZRQEJoPCNaHkIA",
-								"type": "text"
-							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
 								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1NjY1NSwiZXhwIjoxNTgyNTQzMDU1fQ.3GRv7lGKwCMQV6ma2sHs4rsu2kgLQGsE3QXI2c42CEs",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -324,23 +379,53 @@
 							"urlencoded": [
 								{
 									"key": "title",
-									"value": "testing book 123 456",
+									"value": "Great appartment",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "testing book desc 123 456",
+									"value": "Nullam non purus vel mi consectetur laoreet. Ut dictum commodo orci, sit amet posuere leo tincidunt sed. Nulla nibh diam, facilisis nec arcu non, tempor tincidunt nunc. Quisque egestas ut turpis id pharetra. ",
 									"type": "text"
 								},
 								{
-									"key": "isbn",
-									"value": "3214htrff445",
+									"key": "capacity",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "124",
+									"type": "text"
+								},
+								{
+									"key": "area",
+									"value": "40",
+									"type": "text"
+								},
+								{
+									"key": "pictures",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "221B Baker Street",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "London",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Great Britain",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/book/5d43d753cdbdd1264291806c",
+							"raw": "http://localhost:3000/api/rent/5e519b7936ccec3715e099b7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -348,26 +433,26 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"book",
-								"5d43d753cdbdd1264291806c"
+								"rent",
+								"5e519b7936ccec3715e099b7"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Book Delete",
+					"name": "Rent Delete",
 					"request": {
 						"method": "DELETE",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY1MDAxNzQ3LCJleHAiOjE1NjUwMDg5NDd9.NFq5JjFI4nEU7_1oAt2Zj91q0vRSdd3d5to-T_7aRJ4",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1NjY1NSwiZXhwIjoxNTgyNTQzMDU1fQ.3GRv7lGKwCMQV6ma2sHs4rsu2kgLQGsE3QXI2c42CEs",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/book/5d43d753cdbdd1264291806c",
+							"raw": "http://localhost:3000/api/rent/5e519b7936ccec3715e099b7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -375,14 +460,378 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"book",
-								"5d43d753cdbdd1264291806c"
+								"rent",
+								"5e519b7936ccec3715e099b7"
 							]
 						}
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Publication",
+			"item": [
+				{
+					"name": "Publication Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxNWJjNThjNzg3NjI4ZDhkMzBlOWQiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjM5MTc5NSwiZXhwIjoxNTgyNDc4MTk1fQ.sOn2lC9m1wl6uHxYJoMCa7lKe2hhY8RBw-U9NZa1MH4"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "rent",
+									"value": "5e52761e90462d337aa85412",
+									"type": "text"
+								},
+								{
+									"key": "start_at",
+									"value": "2020-02-01",
+									"type": "text"
+								},
+								{
+									"key": "end_at",
+									"value": "2020-02-09",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/publication",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publication List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxNWJjNThjNzg3NjI4ZDhkMzBlOWQiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjM5MTc5NSwiZXhwIjoxNTgyNDc4MTk1fQ.sOn2lC9m1wl6uHxYJoMCa7lKe2hhY8RBw-U9NZa1MH4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/publication",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publication Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1MjI1NSwiZXhwIjoxNTgyNTM4NjU1fQ.hdkhg5zyulSwMdo9hU_Fih3V7uMb_joGcyUzhNGqgMo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/rent/5e519b7936ccec3715e099b7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"rent",
+								"5e519b7936ccec3715e099b7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publication Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ3ODY0NSwiZXhwIjoxNTgyNTY1MDQ1fQ.OsJ7d0j6WhXq354iNNB0DZPgIphqMnYM5Mb5On3TklM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "rent",
+									"value": "5e52af0761b1623d0e414ccc",
+									"type": "text"
+								},
+								{
+									"key": "start_at",
+									"value": "2020-02-01",
+									"type": "text"
+								},
+								{
+									"key": "end_at",
+									"value": "2020-02-09",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/publication/5e5285e1075bea3b684ea0d6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publication",
+								"5e5285e1075bea3b684ea0d6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publication Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ3ODY0NSwiZXhwIjoxNTgyNTY1MDQ1fQ.OsJ7d0j6WhXq354iNNB0DZPgIphqMnYM5Mb5On3TklM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/publication/5e5285e1075bea3b684ea0d6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publication",
+								"5e5285e1075bea3b684ea0d6"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Reservation",
+			"item": [
+				{
+					"name": "Reservation Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjYzNDc0MiwiZXhwIjoxNTgyNzIxMTQyfQ.PJJrO60A_JEPeP-jF2y9NHex93pzBNyYheh0Uy9yApY"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "publication",
+									"value": "5e55172e1099044677a6a75c",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/reservation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reservation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reservation List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjYzNDc0MiwiZXhwIjoxNTgyNzIxMTQyfQ.PJJrO60A_JEPeP-jF2y9NHex93pzBNyYheh0Uy9yApY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/reservation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reservation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reservation Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjYzNDc0MiwiZXhwIjoxNTgyNzIxMTQyfQ.PJJrO60A_JEPeP-jF2y9NHex93pzBNyYheh0Uy9yApY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/reservation/5e5519208d305447d6288af4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reservation",
+								"5e5519208d305447d6288af4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reservation Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjYzNDc0MiwiZXhwIjoxNTgyNzIxMTQyfQ.PJJrO60A_JEPeP-jF2y9NHex93pzBNyYheh0Uy9yApY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "publication",
+									"value": "5e55172e1099044677a6a75c",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/reservation/5e5519208d305447d6288af4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reservation",
+								"5e5519208d305447d6288af4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reservation Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjYzNDc0MiwiZXhwIjoxNTgyNzIxMTQyfQ.PJJrO60A_JEPeP-jF2y9NHex93pzBNyYheh0Uy9yApY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/reservation/5e5519208d305447d6288af4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reservation",
+								"5e5519208d305447d6288af4"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
