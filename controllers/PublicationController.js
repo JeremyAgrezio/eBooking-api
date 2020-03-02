@@ -21,7 +21,7 @@ function PublicationData(data) {
  * @returns {Object}
  */
 exports.publicationList = [
-	auth,
+	//auth,
 	function (req, res) {
 		try {
 			Publication.find({},"_id rent start_at end_at")
@@ -47,14 +47,13 @@ exports.publicationList = [
  * @returns {Object}
  */
 exports.publicationDetail = [
-	auth,
+	//auth,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Publication.findOne({_id: req.params.id,owner: req.user._id},"_id title description capacity price area pictures " +
-			"address city country is_published is_rented createdAt").then((publication)=>{
+			Publication.findOne({_id: req.params.id},"_id start_at end_at createdAt updatedAt").then((publication)=>{
 				if(publication !== null){
 					let publicationData = new PublicationData(publication);
 					return apiResponse.successResponseWithData(res, "Operation success", publicationData);
