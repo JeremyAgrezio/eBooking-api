@@ -16,6 +16,7 @@ function UserData(data) {
 	this.address = data.address;
 	this.city = data.city;
 	this.country = data.country;
+	this.postalCode = data.postalCode;
 	this.phone = data.phone;
 	this.email = data.email;
 	this.picture = data.picture;
@@ -56,6 +57,7 @@ exports.userProfil = [
  * @param {string}      address
  * @param {string}      city
  * @param {string}      country
+ * @param {string}      postalCode
  * @param {string}      phone
  * @param {string}      email
  * @param {string}      picture
@@ -73,6 +75,7 @@ exports.userUpdate = [
 	check("address").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("Address must be specified."),
 	check("city").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("City must be specified."),
 	check("country").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("Country must be specified."),
+	check("postalCode").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("Postal code must be specified."),
 	check("phone").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("Phone must be specified.")
 		.isAlphanumeric().withMessage("Phone has non-alphanumeric characters."),
 	check("email").optional({ checkFalsy: true }).trim().isEmail().withMessage("Email must be a valid email address."),
@@ -84,6 +87,7 @@ exports.userUpdate = [
 	body("address").escape(),
 	body("city").escape(),
 	body("country").escape(),
+	body("postalCode").escape(),
 	body("phone").escape(),
 	body("email").escape(),
 	body("oldPassword").escape(),
@@ -116,6 +120,7 @@ exports.userUpdate = [
 												address: req.body.address,
 												city: req.body.city,
 												country: req.body.country,
+												postalCode: req.body.postalCode,
 												phone: req.body.phone,
 												email: req.body.email,
 												password: hash,
@@ -174,6 +179,7 @@ exports.userResetPassword = [
 									address: user.address,
 									city: user.city,
 									country: user.country,
+									postalCode: user.postalCode,
 									phone: user.phone,
 									email: user.email,
 									password: hash,

@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
 	address: {type: String, required: false},
 	city: {type: String, required: false},
 	country: {type: String, required: false},
+	postalCode: {type: String, required: false},
 	phone: {type: String, required: false},
 	email: {type: String, required: true},
 	password: {type: String, required: true},
