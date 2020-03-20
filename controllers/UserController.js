@@ -2,8 +2,10 @@ const User = require("../models/UserModel");
 const { body, check, validationResult } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
+const utility = require("../helpers/utility");
 const auth = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
+const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 
 // user Schema
@@ -18,6 +20,7 @@ function UserData(data) {
 	this.email = data.email;
 	this.picture = data.picture;
 	this.password = data.password;
+	this.isConfirmed = data.isConfirmed;
 }
 
 /**
@@ -116,6 +119,7 @@ exports.userUpdate = [
 												phone: req.body.phone,
 												email: req.body.email,
 												password: hash,
+												isConfirmed: user.isConfirmed,
 												_id: req.user._id
 											});
 										//update user.
@@ -136,6 +140,75 @@ exports.userUpdate = [
 			}
 		} catch (err) {
 			//throw error in json response with status 500.
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
+ * User Reset Password.
+ *
+ * @param {string}      email
+ *
+ * @returns {Object}
+ */
+exports.userResetPassword = [
+	check("email").trim().isEmail().withMessage("Email must be a valid email address."),
+	body("email").escape(),
+	(req, res) => {
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+			} else {
+				User.findOne({email: req.body.email}).then(user => {
+					if (user) {
+						let otp = utility.randomNumber(4).toString();
+						bcrypt.hash(otp,10,function(err, hash) {
+							console.log(otp)
+							console.log(hash)
+							let userModel = new User(
+								{
+									firstName: user.firstName,
+									lastName: user.lastName,
+									address: user.address,
+									city: user.city,
+									country: user.country,
+									phone: user.phone,
+									email: user.email,
+									password: hash,
+									isConfirmed: user.isConfirmed,
+									_id: user._id
+								}
+							);
+							// Html email body
+							let html = `<p>Password reset.</p><p>New password: ${otp}</p>`;
+							// Send confirmation email
+							mailer.send(
+								constants.confirmEmails.from,
+								req.body.email,
+								"Password Reset",
+								html
+							).then(function(){
+								// Update user.
+								User.findOneAndUpdate({email: req.body.email}, userModel, {}, function (err) {
+									if (err) {
+										return apiResponse.ErrorResponse(res, err);
+									} else {
+										return apiResponse.successResponseWithData(res, "Password Reset Success.");
+									}
+								});
+							}).catch(err => {
+								console.log(err);
+								return apiResponse.ErrorResponse(res,err);
+							}) ;
+						});
+					} else {
+						return apiResponse.unauthorizedResponse(res, "Email is wrong.");
+					}
+				});
+			}
+		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
