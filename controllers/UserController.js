@@ -168,7 +168,7 @@ exports.userResetPassword = [
 			} else {
 				User.findOne({email: req.body.email}).then(user => {
 					if (user) {
-						let otp = utility.randomNumber(4).toString();
+						let otp = utility.randomNumber(6).toString();
 						bcrypt.hash(otp,10,function(err, hash) {
 							console.log(otp)
 							console.log(hash)
