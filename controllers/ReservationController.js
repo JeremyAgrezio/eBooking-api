@@ -100,6 +100,8 @@ exports.reservationRegister = [
 						Rent.findById(foundPublication.rent, function (err, foundRent) {
 							if (foundRent === null) {
 								return apiResponse.notFoundResponse(res, "Rent not exists with this id");
+							} else if (foundRent.is_rented === true) {
+								return apiResponse.unauthorizedResponse(res, "Rent is already reserved");
 							} else {
 								//update rent.
 								const update = {is_rented: true};
@@ -229,7 +231,7 @@ exports.reservationDelete = [
 					if(foundReservation.tenant.toString() !== req.user._id){
 						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 					}else{
-						Publication.findById(req.body.publication, function (err, foundPublication) {
+						Publication.findById(foundReservation.publication, function (err, foundPublication) {
 							if (foundPublication=== null) {
 								return apiResponse.notFoundResponse(res, "Publication not exists with this id");
 							} else {
