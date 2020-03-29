@@ -15,6 +15,19 @@ function PublicationData(data) {
 	this.createdAt = data.createdAt;
 }
 
+// Rent Schema
+function RentData(data) {
+	this.title= data.title;
+	this.description = data.description;
+	this.capacity = data.capacity;
+	this.price = data.price;
+	this.area = data.area;
+	this.pictures = data.pictures;
+	this.address = data.address;
+	this.city = data.city;
+	this.country = data.country;
+}
+
 /**
  * Publication List.
  * 
@@ -55,10 +68,16 @@ exports.publicationDetail = [
 		try {
 			Publication.findOne({_id: req.params.id},"_id start_at end_at createdAt updatedAt").then((publication)=>{
 				if(publication !== null){
-					let publicationData = new PublicationData(publication);
-					return apiResponse.successResponseWithData(res, "Operation success", publicationData);
-				}else{
-					return apiResponse.successResponseWithData(res, "Operation success", {});
+					Rent.findOne(publication.rent,"title description capacity price area pictures address city country").then((rent)=> {
+						if (rent !== null) {
+							const publicationData = new PublicationData(publication);
+							const rentData = new RentData(rent);
+							const result = Object.assign(rentData, publicationData);
+							return apiResponse.successResponseWithData(res, "Operation success", result);
+						} else {
+							return apiResponse.successResponseWithData(res, "Operation success", {});
+						}
+					});
 				}
 			});
 		} catch (err) {
