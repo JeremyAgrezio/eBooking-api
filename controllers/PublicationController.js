@@ -15,19 +15,6 @@ function PublicationData(data) {
 	this.createdAt = data.createdAt;
 }
 
-// Rent Schema
-function RentData(data) {
-	this.title= data.title;
-	this.description = data.description;
-	this.capacity = data.capacity;
-	this.price = data.price;
-	this.area = data.area;
-	this.pictures = data.pictures;
-	this.address = data.address;
-	this.city = data.city;
-	this.country = data.country;
-}
-
 /**
  * Publication List.
  * 
@@ -37,7 +24,8 @@ exports.publicationList = [
 	//auth,
 	function (req, res) {
 		try {
-			Publication.find({},"_id rent start_at end_at")
+			Publication.find({}, {'_id': 1, 'start_at': 1, 'end_at':1})
+			.populate('rent', {'_id': 0, 'picture': 1, 'title': 1, 'capacity': 1, 'price': 1, 'area': 1})
 			.then((publications)=>{
 				if(publications.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", publications);
@@ -66,18 +54,13 @@ exports.publicationDetail = [
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Publication.findOne({_id: req.params.id},"_id start_at end_at createdAt updatedAt").then((publication)=>{
+			Publication.findOne({_id: req.params.id},"_id start_at end_at")
+				.populate('rent', {'_id': 0, 'is_published': 0, 'is_rented': 0, 'owner': 0, 'updatedAt': 0, 'createdAt': 0, '__v': 0})
+				.then((publication)=>{
 				if(publication !== null){
-					Rent.findOne(publication.rent,"title description capacity price area pictures address city country").then((rent)=> {
-						if (rent !== null) {
-							const publicationData = new PublicationData(publication);
-							const rentData = new RentData(rent);
-							const result = Object.assign(rentData, publicationData);
-							return apiResponse.successResponseWithData(res, "Operation success", result);
-						} else {
-							return apiResponse.successResponseWithData(res, "Operation success", {});
-						}
-					});
+					return apiResponse.successResponseWithData(res, "Operation success", publication);
+				} else {
+					return apiResponse.successResponseWithData(res, "Operation success", {});
 				}
 			});
 		} catch (err) {
@@ -119,28 +102,19 @@ exports.publicationRegister = [
 				if(!mongoose.Types.ObjectId.isValid(req.body.rent)){
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid rent ID");
 				} else {
-
-					Rent.findById(req.body.rent, function (err, foundRent) {
-						if (foundRent === null) {
-							return apiResponse.notFoundResponse(res, "Rent not exists with this id");
+					//Update rent.
+					Rent.findByIdAndUpdate(req.body.rent, { is_published: true }, {}, function (err) {
+						if (err) {
+							return apiResponse.ErrorResponse(res, err);
 						} else {
-							//update rent.
-							const update = {is_published: true};
-
-							Rent.findByIdAndUpdate(req.body.rent, update, {}, function (err) {
+							//Save publication.
+							publication.save(function (err) {
 								if (err) {
 									return apiResponse.ErrorResponse(res, err);
-								} else {
-									//Save publication.
-									publication.save(function (err) {
-										if (err) {
-											return apiResponse.ErrorResponse(res, err);
-										}
-
-										let publicationData = new PublicationData(publication);
-										return apiResponse.successResponseWithData(res, "Publication register Success.", publicationData);
-									});
 								}
+
+								const publicationData = new PublicationData(publication);
+								return apiResponse.successResponseWithData(res, "Publication register Success.", publicationData);
 							});
 						}
 					});
@@ -200,28 +174,15 @@ exports.publicationUpdate = [
 										if (foundRent.owner.toString() !== req.user._id) {
 											return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 										} else {
-											//update rent.
-											Rent.findByIdAndUpdate(foundPublication.rent, {is_published: false}, {}, function (err) {
+											//Update publication.
+											Publication.findByIdAndUpdate(req.params.id, publication, {}, function (err) {
 												if (err) {
 													return apiResponse.ErrorResponse(res, err);
 												} else {
-													Rent.findByIdAndUpdate(req.body.rent, {is_published: true}, {}, function (err) {
-														if (err) {
-															return apiResponse.ErrorResponse(res, err);
-														} else {
-															//update publication.
-															Publication.findByIdAndUpdate(req.params.id, publication, {}, function (err) {
-																if (err) {
-																	return apiResponse.ErrorResponse(res, err);
-																} else {
-																	let publicationData = new PublicationData(publication);
-																	return apiResponse.successResponseWithData(res, "Publication update Success.", publicationData);
-																}
-															});
-														}
-													});
+													let publicationData = new PublicationData(publication);
+													return apiResponse.successResponseWithData(res, "Publication update Success.", publicationData);
 												}
-											});
+											})
 										}
 									}
 								});
@@ -251,29 +212,30 @@ exports.publicationDelete = [
 			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 		}
 		try {
-			Publication.findById(req.params.id, function (err, foundPublication) {
+			Publication.findById(req.params.id)
+			.populate('rent')
+			.then((foundPublication)=>{
 				if(foundPublication === null){
-					return apiResponse.notFoundResponse(res,"Publication not exists with this id");
+					return apiResponse.notFoundResponse(res, "Publication not exists with this id");
 				}else{
-					Rent.findById(foundPublication.rent, function (err, foundRent) {
-						if (foundRent === null) {
-							return apiResponse.notFoundResponse(res, "Rent not exists with this id");
-						} else {
-							//Check authorized user
-							if (foundRent.owner.toString() !== req.user._id) {
-								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+					if (foundPublication.rent.owner.toString() !== req.user._id) {
+						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+					} else {
+						//delete publication.
+						Publication.findByIdAndRemove(req.params.id, function (err) {
+							if (err) {
+								return apiResponse.ErrorResponse(res, err);
 							} else {
-								//delete publication.
-								Publication.findByIdAndRemove(req.params.id, function (err) {
+								Rent.findByIdAndUpdate(foundPublication.rent, { is_published: false }, {}, function (err) {
 									if (err) {
 										return apiResponse.ErrorResponse(res, err);
 									} else {
 										return apiResponse.successResponse(res, "Publication delete Success.");
 									}
-								});
+								})
 							}
-						}
-					});
+						});
+					}
 				}
 			});
 		} catch (err) {
