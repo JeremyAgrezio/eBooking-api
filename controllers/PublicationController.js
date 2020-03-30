@@ -25,7 +25,7 @@ exports.publicationList = [
 	function (req, res) {
 		try {
 			Publication.find({}, {'_id': 1, 'start_at': 1, 'end_at':1})
-			.populate('rent', {'_id': 0, 'picture': 1, 'title': 1, 'capacity': 1, 'price': 1, 'area': 1})
+			.populate('rent', {'_id': 0,  'is_rented': 1, 'picture': 1, 'title': 1, 'capacity': 1, 'price': 1, 'area': 1})
 			.then((publications)=>{
 				if(publications.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", publications);
@@ -55,7 +55,7 @@ exports.publicationDetail = [
 		}
 		try {
 			Publication.findOne({_id: req.params.id},"_id start_at end_at")
-				.populate('rent', {'_id': 0, 'is_published': 0, 'is_rented': 0, 'owner': 0, 'updatedAt': 0, 'createdAt': 0, '__v': 0})
+				.populate('rent', {'_id': 0, 'is_published': 0, 'owner': 0, 'updatedAt': 0, 'createdAt': 0, '__v': 0})
 				.then((publication)=>{
 				if(publication !== null){
 					return apiResponse.successResponseWithData(res, "Operation success", publication);
@@ -179,7 +179,7 @@ exports.publicationUpdate = [
 												if (err) {
 													return apiResponse.ErrorResponse(res, err);
 												} else {
-													let publicationData = new PublicationData(publication);
+													const publicationData = new PublicationData(publication);
 													return apiResponse.successResponseWithData(res, "Publication update Success.", publicationData);
 												}
 											})
