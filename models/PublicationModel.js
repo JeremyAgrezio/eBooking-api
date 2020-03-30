@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const Rent = require("../models/RentModel");
 
 const Schema = mongoose.Schema;
 
 const PublicationSchema = new Schema({
-    rent: {type: Schema.ObjectId, required: true},
+    rent: {type: Schema.ObjectId, required: true, ref: 'Rent'},
     start_at: {type: Date, required: true},
     end_at: {type: Date, required: true},
 }, {timestamps: true});
