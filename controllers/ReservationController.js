@@ -24,8 +24,10 @@ exports.reservationList = [
 	auth,
 	function (req, res) {
 		try {
-			Reservation.find({tenant: req.user._id},"_id publication tenant")
+			Reservation.find({tenant: req.user._id}, {'_id': 1, 'publication': 1, 'tenant': 1})
+			.populate('publication', {'_id': 0, 'start_at': 1, 'end_at': 1})
 			.then((reservations)=>{
+				console.log(reservations);
 				if(reservations.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", reservations);
 				}else{
@@ -53,7 +55,9 @@ exports.reservationDetail = [
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Reservation.findOne({_id: req.params.id,tenant: req.user._id},"_id publication tenant createdAt").then((reservation)=>{
+			Reservation.findOne({_id: req.params.id,tenant: req.user._id},"_id publication tenant createdAt")
+			.populate('publication', {'createdAt': 0, 'updatedAt': 0, '__v': 0})
+			.then((reservation)=>{
 				if(reservation !== null){
 					let reservationData = new ReservationData(reservation);
 					return apiResponse.successResponseWithData(res, "Operation success", reservationData);
