@@ -33,15 +33,21 @@ const WebSocket = require('ws');
 exports.lockOpen = [
 	auth,
 	function (req, res) {
-		let WEBSOCKET_ROUTE = "/ws";
-		let ws = new WebSocket("wss:" + "//stockingless-axolotl-6319.dataplicity.io" + WEBSOCKET_ROUTE);
+		let ws = new WebSocket("wss://stockingless-axolotl-6319.dataplicity.io/ws");
 		ws.onopen = function(evt) {
 			console.log("WEBSOCKET STATUS: Connected");
 			ws.send("on_g");
-			return apiResponse.successResponseWithData(res, "Door Unlocked !");
 		};
 
+		// ws.onmessage(function(data) {
+		// 	console.log(data);
+		// 	if(data === "door_unlocked") return apiResponse.successResponseWithData(res, "Door Unlocked !");
+		// 	if(data === "door_locked") return apiResponse.successResponseWithData(res, "Door Locked !");
+		// });
+
 		ws.onmessage = function(evt) {
+			if(evt.data === "door_unlocked") return apiResponse.successResponseWithData(res, "Door Unlocked !");
+			if(evt.data === "door_locked") return apiResponse.successResponseWithData(res, "Door Locked !");
 		};
 
 		ws.onclose = function(evt) {
