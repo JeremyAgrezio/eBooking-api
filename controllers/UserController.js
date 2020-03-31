@@ -61,8 +61,6 @@ exports.userProfil = [
  * @param {string}      phone
  * @param {string}      email
  * @param {string}      picture
- * @param {string}      oldPassword
- * @param {string}      newPassword
  *
  * @returns {Object}
  */
@@ -80,8 +78,6 @@ exports.userUpdate = [
 		.isAlphanumeric().withMessage("Phone has non-alphanumeric characters."),
 	check("email").optional({ checkFalsy: true }).trim().isEmail().withMessage("Email must be a valid email address."),
 	check("picture").optional({ checkFalsy: true }).trim().isURL().withMessage("Picture must be a valid URL."),
-	check("oldPassword").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("Old password must be specified."),
-	check("newPassword").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("New password must be specified."),
 	body("firstName").escape(),
 	body("lastName").escape(),
 	body("address").escape(),
@@ -90,8 +86,6 @@ exports.userUpdate = [
 	body("postalCode").escape(),
 	body("phone").escape(),
 	body("email").escape(),
-	body("oldPassword").escape(),
-	body("newPassword").escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
@@ -106,39 +100,29 @@ exports.userUpdate = [
 						if (user._id.toString() !== req.user._id) {
 							return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 						} else {
-							//Compare given password with db's hash.
-							bcrypt.compare(req.body.oldPassword,user.password,function (err,same) {
-								if (!same) {
-									return apiResponse.ErrorResponse(res, "Old password does not match.");
+							const userModel = new User(
+								{
+									firstName: req.body.firstName,
+									lastName: req.body.lastName,
+									address: req.body.address,
+									city: req.body.city,
+									country: req.body.country,
+									postalCode: req.body.postalCode,
+									phone: req.body.phone,
+									email: req.body.email,
+									password: user.password,
+									isConfirmed: user.isConfirmed,
+									_id: req.user._id
+								});
+							//update user password.
+							User.findByIdAndUpdate(req.user, userModel, {}, function (err) {
+								if (err) {
+									return apiResponse.ErrorResponse(res, err);
 								} else {
-									//hash input password
-									bcrypt.hash(req.body.newPassword, 10, function (err, hash) {
-										const userModel = new User(
-											{
-												firstName: req.body.firstName,
-												lastName: req.body.lastName,
-												address: req.body.address,
-												city: req.body.city,
-												country: req.body.country,
-												postalCode: req.body.postalCode,
-												phone: req.body.phone,
-												email: req.body.email,
-												password: hash,
-												isConfirmed: user.isConfirmed,
-												_id: req.user._id
-											});
-										//update user password.
-										User.findByIdAndUpdate(req.user, userModel, {}, function (err) {
-											if (err) {
-												return apiResponse.ErrorResponse(res, err);
-											} else {
-												let { id, password, ...userData } = new UserData(userModel);
-												return apiResponse.successResponseWithData(res, "User profile update Success.", userData);
-											}
-										});
-									})
+									let { id, password, ...userData } = new UserData(userModel);
+									return apiResponse.successResponseWithData(res, "User profile update Success.", userData);
 								}
-							})
+							});
 						}
 					}
 				});
