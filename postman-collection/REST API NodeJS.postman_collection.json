@@ -251,7 +251,7 @@
 				{
 					"name": "User Update",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -323,7 +323,7 @@
 				{
 					"name": "User Password Update",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -341,12 +341,12 @@
 							"urlencoded": [
 								{
 									"key": "oldPassword",
-									"value": "Azerty",
+									"value": "",
 									"type": "text"
 								},
 								{
 									"key": "newPassword",
-									"value": "Azerty",
+									"value": "",
 									"type": "text"
 								}
 							]
@@ -1017,6 +1017,51 @@
 								"api",
 								"reservation",
 								"5e556c8e616d0b4f9fc67566"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Lock",
+			"item": [
+				{
+					"name": "User Password Update",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTY0MDg3MCwiZXhwIjoxNTg1NzI3MjcwfQ.w3vmil8SGsKxoK5DYoqA9xBHwMTdWoyaGkYnNDXTGuE"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/lock/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"lock",
+								""
 							]
 						}
 					},
