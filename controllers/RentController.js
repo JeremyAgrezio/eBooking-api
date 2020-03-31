@@ -17,6 +17,7 @@ function RentData(data) {
 	this.address = data.address;
 	this.city = data.city;
 	this.country = data.country;
+	this.postalCode = data.postalCode;
 	this.is_published = data.is_published;
 	this.is_rented = data.is_rented;
 	this.createdAt = data.createdAt;
@@ -31,7 +32,7 @@ exports.rentList = [
 	auth,
 	function (req, res) {
 		try {
-			Rent.find({owner: req.user._id},"_id title capacity price area pictures address city country ")
+			Rent.find({owner: req.user._id},"_id title capacity price area pictures address city country postalCode")
 			.then((rents)=>{
 				if(rents.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", rents);
@@ -61,7 +62,7 @@ exports.rentDetail = [
 		}
 		try {
 			Rent.findOne({_id: req.params.id,owner: req.user._id},"_id title description capacity price area pictures " +
-			"address city country is_published is_rented createdAt").then((rent)=>{
+			"address city country postalCode is_published is_rented createdAt").then((rent)=>{
 				if(rent !== null){
 					let rentData = new RentData(rent);
 					return apiResponse.successResponseWithData(res, "Operation success", rentData);
@@ -88,6 +89,7 @@ exports.rentDetail = [
  * @param {string} address
  * @param {string} city
  * @param {string} country
+ * @param {string} postalCode
  *
  * @returns {Object}
  */
@@ -102,6 +104,7 @@ exports.rentRegister = [
 	check("address", "Address must not be empty.").isLength({ min: 1 }).trim(),
 	check("city", "City must not be empty.").isLength({ min: 1 }).trim(),
 	check("country", "Country must not be empty.").isLength({ min: 1 }).trim(),
+	check("postalCode", "Postal code must not be empty.").isLength({ min: 1 }).trim(),
 	body("*").escape(),
 	(req, res) => {
 		try {
@@ -116,6 +119,7 @@ exports.rentRegister = [
 					address: req.body.address,
 					city: req.body.city,
 					country: req.body.country,
+					postalCode: req.body.postalCode,
 					owner: req.user,
 				});
 
@@ -149,6 +153,7 @@ exports.rentRegister = [
  * @param {string} address
  * @param {string} city
  * @param {string} country
+ * @param {string} postalCode
  * 
  * @returns {Object}
  */
@@ -163,6 +168,7 @@ exports.rentUpdate = [
 	check("address", "Address must not be empty.").isLength({ min: 1 }).trim(),
 	check("city", "City must not be empty.").isLength({ min: 1 }).trim(),
 	check("country", "Country must not be empty.").isLength({ min: 1 }).trim(),
+	check("postalCode", "Postal code must not be empty.").isLength({ min: 1 }).trim(),
 	body("*").escape(),
 	(req, res) => {
 		try {
@@ -177,6 +183,7 @@ exports.rentUpdate = [
 					address: req.body.address,
 					city: req.body.city,
 					country: req.body.country,
+					postalCode: req.body.postalCode,
 					_id:req.params.id
 				});
 
