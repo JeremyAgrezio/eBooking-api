@@ -293,6 +293,11 @@
 									"type": "text"
 								},
 								{
+									"key": "postalCode",
+									"value": "",
+									"type": "text"
+								},
+								{
 									"key": "phone",
 									"value": "",
 									"type": "text"
@@ -478,6 +483,11 @@
 								{
 									"key": "country",
 									"value": "Great Britain",
+									"type": "text"
+								},
+								{
+									"key": "postalCode",
+									"value": "",
 									"type": "text"
 								}
 							]
@@ -1029,7 +1039,7 @@
 			"name": "Lock",
 			"item": [
 				{
-					"name": "User Password Update",
+					"name": "Lock Unlock",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
