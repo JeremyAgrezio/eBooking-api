@@ -50,7 +50,7 @@ exports.userProfil = [
 ];
 
 /**
- * User update.
+ * User profile update.
  *
  * @param {string}      firstName
  * @param {string}      lastName
@@ -127,13 +127,84 @@ exports.userUpdate = [
 												isConfirmed: user.isConfirmed,
 												_id: req.user._id
 											});
-										//update user.
+										//update user password.
 										User.findByIdAndUpdate(req.user, userModel, {}, function (err) {
 											if (err) {
 												return apiResponse.ErrorResponse(res, err);
 											} else {
 												let { id, password, ...userData } = new UserData(userModel);
-												return apiResponse.successResponseWithData(res, "User update Success.", userData);
+												return apiResponse.successResponseWithData(res, "User profile update Success.", userData);
+											}
+										});
+									})
+								}
+							})
+						}
+					}
+				});
+			}
+		} catch (err) {
+			//throw error in json response with status 500.
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
+ * User password update.
+ *
+ * @param {string}      oldPassword
+ * @param {string}      newPassword
+ *
+ * @returns {Object}
+ */
+exports.userPasswordUpdate = [
+	auth,
+	check("oldPassword").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("Old password must be specified."),
+	check("newPassword").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("New password must be specified."),
+	body("oldPassword").escape(),
+	body("newPassword").escape(),
+	(req, res) => {
+		try {
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+			}
+			else {
+				User.findById(req.user._id).then(user => {
+					if (user) {
+						//Check authorized user
+						if (user._id.toString() !== req.user._id) {
+							return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+						} else {
+							//Compare given password with db's hash.
+							bcrypt.compare(req.body.oldPassword,user.password,function (err,same) {
+								if (!same) {
+									return apiResponse.ErrorResponse(res, "Old password does not match.");
+								} else {
+									//hash input password
+									bcrypt.hash(req.body.newPassword, 10, function (err, hash) {
+										const userModel = new User(
+											{
+												firstName: user.firstName,
+												lastName: user.lastName,
+												address: user.address,
+												city: user.city,
+												country: user.country,
+												postalCode: user.postalCode,
+												phone: user.phone,
+												email: user.email,
+												password: hash,
+												isConfirmed: user.isConfirmed,
+												_id: req.user._id
+											});
+										//update user.
+										User.findByIdAndUpdate(req.user, userModel, {}, function (err) {
+											if (err) {
+												return apiResponse.ErrorResponse(res, err);
+											} else {
+												return apiResponse.successResponseWithData(res, "Password update Success.");
 											}
 										});
 									})
@@ -157,7 +228,7 @@ exports.userUpdate = [
  *
  * @returns {Object}
  */
-exports.userResetPassword = [
+exports.userPasswordReset = [
 	check("email").trim().isEmail().withMessage("Email must be a valid email address."),
 	body("email").escape(),
 	(req, res) => {
@@ -201,7 +272,7 @@ exports.userResetPassword = [
 									if (err) {
 										return apiResponse.ErrorResponse(res, err);
 									} else {
-										return apiResponse.successResponseWithData(res, "Password Reset Success.");
+										return apiResponse.successResponseWithData(res, "User Password Reset Success.");
 									}
 								});
 							}).catch(err => {
@@ -210,7 +281,7 @@ exports.userResetPassword = [
 							}) ;
 						});
 					} else {
-						return apiResponse.unauthorizedResponse(res, "Email is wrong.");
+						return apiResponse.unauthorizedResponse(res, "Email address error.");
 					}
 				});
 			}
