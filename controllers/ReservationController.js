@@ -27,7 +27,6 @@ exports.reservationList = [
 			Reservation.find({tenant: req.user._id}, {'_id': 1, 'publication': 1, 'tenant': 1})
 			.populate('publication', {'_id': 0, 'start_at': 1, 'end_at': 1})
 			.then((reservations)=>{
-				console.log(reservations);
 				if(reservations.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", reservations);
 				}else{
