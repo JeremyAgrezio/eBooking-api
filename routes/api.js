@@ -5,6 +5,7 @@ const bookRouter = require("./book");
 const rentRouter = require("./rent");
 const publicationRouter = require("./publication");
 const reservationRouter = require("./reservation");
+const lockRouter = require("./lock");
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use("/book/", bookRouter);
 app.use("/rent/", rentRouter);
 app.use("/publication/", publicationRouter);
 app.use("/reservation/", reservationRouter);
+app.use("/lock/", lockRouter);
 
 module.exports = app;
