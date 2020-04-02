@@ -33,17 +33,11 @@ const WebSocket = require('ws');
 exports.lockOpen = [
 	auth,
 	function (req, res) {
-		let ws = new WebSocket("wss://stockingless-axolotl-6319.dataplicity.io/ws");
+		const ws = new WebSocket("wss://" + process.env.DOOR_WEBSOCKET);
 		ws.onopen = function(evt) {
 			console.log("WEBSOCKET STATUS: Connected");
 			ws.send("on_g");
 		};
-
-		// ws.onmessage(function(data) {
-		// 	console.log(data);
-		// 	if(data === "door_unlocked") return apiResponse.successResponseWithData(res, "Door Unlocked !");
-		// 	if(data === "door_locked") return apiResponse.successResponseWithData(res, "Door Locked !");
-		// });
 
 		ws.onmessage = function(evt) {
 			if(evt.data === "door_unlocked") return apiResponse.successResponseWithData(res, "Door Unlocked !");
@@ -53,22 +47,6 @@ exports.lockOpen = [
 		ws.onclose = function(evt) {
 			console.log("WEBSOCKET STATUS: Disconnected");
 		};
-		// try {
-		// 	// User.findById(req.user._id,{_id: 0, password: 0})
-		// 	// 	.then((user)=>{
-		// 	// 		if(user !== null){
-		// 	//
-		// 	// 			let userData = new UserData(user);
-		// 	// 			return apiResponse.successResponseWithData(res, "Operation success", userData);
-		// 	// 		}else{
-		// 	// 			return apiResponse.successResponseWithData(res, "Operation success", {});
-		// 	// 		}
-		// 	// 	});
-		//
-		// } catch (err) {
-		// 	//throw error in json response with status 500.
-		// 	return apiResponse.ErrorResponse(res, err);
-		// }
 	}
 ];
 
