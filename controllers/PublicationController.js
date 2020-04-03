@@ -102,19 +102,30 @@ exports.publicationRegister = [
 				if(!mongoose.Types.ObjectId.isValid(req.body.rent)){
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid rent ID");
 				} else {
-					//Update rent.
-					Rent.findByIdAndUpdate(req.body.rent, { is_published: true }, {}, function (err) {
+					Rent.findById(req.body.rent, function (err, rent) {
+						console.log(rent);
 						if (err) {
 							return apiResponse.ErrorResponse(res, err);
-						} else {
-							//Save publication.
-							publication.save(function (err) {
+						}
+						else if (!rent.associatedLock) {
+							return apiResponse.ErrorResponse(res, "Rent doesn't have an associated lock");
+						}
+						else {
+							//Update rent.
+							Rent.findByIdAndUpdate(req.body.rent, {is_published: true}, {}, function (err) {
 								if (err) {
 									return apiResponse.ErrorResponse(res, err);
-								}
+								} else {
+									//Save publication.
+									publication.save(function (err) {
+										if (err) {
+											return apiResponse.ErrorResponse(res, err);
+										}
 
-								const publicationData = new PublicationData(publication);
-								return apiResponse.successResponseWithData(res, "Publication register Success.", publicationData);
+										const publicationData = new PublicationData(publication);
+										return apiResponse.successResponseWithData(res, "Publication register Success.", publicationData);
+									});
+								}
 							});
 						}
 					});
