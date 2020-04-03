@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Lock = require("../models/LockModel");
 
 const Schema = mongoose.Schema;
 
@@ -12,9 +13,10 @@ const RentSchema = new Schema({
     address: {type: String, required: true},
     city: {type: String, required: true},
     country: {type: String, required: true},
-    postalCode: {type: String, required: false},
+    postalCode: {type: String, required: true},
     is_published: {type: Boolean, required: true, default: 0},
     is_rented: {type: Boolean, required: true, default: 0},
+    associatedLock: {type: Schema.ObjectId, ref: "Lock"},
     owner: {type: Schema.ObjectId, ref: "User", required: true},
 }, {timestamps: true});
 
