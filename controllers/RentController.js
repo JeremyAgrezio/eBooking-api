@@ -20,6 +20,7 @@ function RentData(data) {
 	this.postalCode = data.postalCode;
 	this.is_published = data.is_published;
 	this.is_rented = data.is_rented;
+	this.associatedLock = data.associatedLock;
 	this.createdAt = data.createdAt;
 }
 
@@ -90,6 +91,7 @@ exports.rentDetail = [
  * @param {string} city
  * @param {string} country
  * @param {string} postalCode
+ * @param {string} associatedLock
  *
  * @returns {Object}
  */
@@ -120,6 +122,7 @@ exports.rentRegister = [
 					city: req.body.city,
 					country: req.body.country,
 					postalCode: req.body.postalCode,
+					associatedLock: req.body.associatedLock || null,
 					owner: req.user,
 				});
 
@@ -127,12 +130,21 @@ exports.rentRegister = [
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
 			}
 			else {
-				//Save rent.
-				rent.save(function (err) {
-					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let rentData = new RentData(rent);
-					return apiResponse.successResponseWithData(res,"Rent register Success.", rentData);
-				});
+				if(req.params.associatedLock) {
+					if(!mongoose.Types.ObjectId.isValid(req.params.associatedLock)){
+						return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
+					}
+				}
+				else {
+					//Save rent.
+					rent.save(function (err) {
+						if (err) {
+							return apiResponse.ErrorResponse(res, err);
+						}
+						let rentData = new RentData(rent);
+						return apiResponse.successResponseWithData(res, "Rent register Success.", rentData);
+					});
+				}
 			}
 		} catch (err) {
 			//throw error in json response with status 500. 
@@ -144,6 +156,7 @@ exports.rentRegister = [
 /**
  * Rent update.
  *
+ * @param {string} id
  * @param {string} title
  * @param {string} description
  * @param {number} capacity
@@ -184,6 +197,7 @@ exports.rentUpdate = [
 					city: req.body.city,
 					country: req.body.country,
 					postalCode: req.body.postalCode,
+					associatedLock: req.body.associatedLock || null,
 					_id:req.params.id
 				});
 
@@ -194,26 +208,32 @@ exports.rentUpdate = [
 				if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 				}else{
-					Rent.findById(req.params.id, function (err, foundRent) {
-						if(foundRent === null){
-							return apiResponse.notFoundResponse(res,"Rent not exists with this id");
-						}else{
-							//Check authorized user
-							if(foundRent.owner.toString() !== req.user._id){
-								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-							}else{
-								//update rent.
-								Rent.findByIdAndUpdate(req.params.id, rent, {},function (err) {
-									if (err) { 
-										return apiResponse.ErrorResponse(res, err); 
-									}else{
-										let rentData = new RentData(rent);
-										return apiResponse.successResponseWithData(res,"Rent update Success.", rentData);
-									}
-								});
-							}
+					if(req.body.associatedLock){
+						if(!mongoose.Types.ObjectId.isValid(req.params.associatedLock)){
+							return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
 						}
-					});
+					}else {
+						Rent.findById(req.params.id, function (err, foundRent) {
+							if (foundRent === null) {
+								return apiResponse.notFoundResponse(res, "Rent not exists with this id");
+							} else {
+								//Check authorized user
+								if (foundRent.owner.toString() !== req.user._id) {
+									return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+								} else {
+									//update rent.
+									Rent.findByIdAndUpdate(req.params.id, rent, {}, function (err) {
+										if (err) {
+											return apiResponse.ErrorResponse(res, err);
+										} else {
+											let rentData = new RentData(rent);
+											return apiResponse.successResponseWithData(res, "Rent update Success.", rentData);
+										}
+									});
+								}
+							}
+						});
+					}
 				}
 			}
 		} catch (err) {
