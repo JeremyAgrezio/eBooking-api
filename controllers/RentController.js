@@ -33,7 +33,7 @@ exports.rentList = [
 	auth,
 	function (req, res) {
 		try {
-			Rent.find({owner: req.user._id},"_id title capacity price area pictures address city country postalCode")
+			Rent.find({owner: req.user._id},"_id title description capacity price pictures is_rented is_published")
 			.then((rents)=>{
 				if(rents.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", rents);
