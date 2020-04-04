@@ -8,6 +8,16 @@ const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
 
+const
+	fs = require('fs'),
+	throttle = require('express-throttle-bandwidth')
+
+const folder = path.join(__dirname, 'uploads')
+
+if (!fs.existsSync(folder)) {
+	fs.mkdirSync(folder)
+}
+
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
@@ -35,9 +45,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "files")));
 
 //To allow cross-origin requests
 app.use(cors());
+
+// Throttling bandwidth
+app.use(throttle(1024 * 128))
 
 //Route Prefixes
 app.use("/", indexRouter);
