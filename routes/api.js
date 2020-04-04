@@ -6,6 +6,7 @@ const rentRouter = require("./rent");
 const publicationRouter = require("./publication");
 const reservationRouter = require("./reservation");
 const lockRouter = require("./lock");
+const uploadRouter = require("./upload");
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.use("/rent/", rentRouter);
 app.use("/publication/", publicationRouter);
 app.use("/reservation/", reservationRouter);
 app.use("/lock/", lockRouter);
+app.use("/upload/", uploadRouter);
 
 module.exports = app;
