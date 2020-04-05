@@ -62,8 +62,7 @@ exports.rentDetail = [
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Rent.findOne({_id: req.params.id,owner: req.user._id},"_id title description capacity price area pictures " +
-			"address city country postalCode is_published is_rented createdAt").then((rent)=>{
+			Rent.findOne({_id: req.params.id,owner: req.user._id}).then((rent)=>{
 				if(rent !== null){
 					let rentData = new RentData(rent);
 					return apiResponse.successResponseWithData(res, "Operation success", rentData);
