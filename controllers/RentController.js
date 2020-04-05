@@ -161,11 +161,12 @@ exports.rentRegister = [
  * @param {number} capacity
  * @param {number} price
  * @param {number} area
- * @param {array} pictures
+ * @param {array}  pictures
  * @param {string} address
  * @param {string} city
  * @param {string} country
  * @param {string} postalCode
+ * @param {string} associatedLock
  * 
  * @returns {Object}
  */
@@ -196,7 +197,7 @@ exports.rentUpdate = [
 					city: req.body.city,
 					country: req.body.country,
 					postalCode: req.body.postalCode,
-					associatedLock: req.body.associatedLock || null,
+					associatedLock: req.body.associatedLock ? req.body.associatedLock : null,
 					_id:req.params.id
 				});
 
@@ -207,10 +208,8 @@ exports.rentUpdate = [
 				if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 				}else{
-					if(req.body.associatedLock){
-						if(!mongoose.Types.ObjectId.isValid(req.params.associatedLock)){
-							return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
-						}
+					if(req.body.associatedLock && !mongoose.Types.ObjectId.isValid(req.body.associatedLock)){
+						return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
 					}else {
 						Rent.findById(req.params.id, function (err, foundRent) {
 							if (foundRent === null) {
