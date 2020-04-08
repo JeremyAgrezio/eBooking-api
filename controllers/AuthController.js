@@ -127,8 +127,9 @@ exports.login = [
 											firstName: user.firstName,
 											lastName: user.lastName,
 											email: user.email,
+											role: user.role,
 										};
-										//Prepare JWT token for authentication
+										// Prepare JWT token for authentication
 										const jwtPayload = userData;
 										const jwtData = {
 											expiresIn: process.env.JWT_TIMEOUT_DURATION,
