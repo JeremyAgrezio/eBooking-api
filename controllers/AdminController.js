@@ -177,16 +177,15 @@ exports.lastWeekUsersRegistered = [
 			User.findById(req.user._id)
 				.then((user)=> {
 					if (user.role === "ADMIN") {
-						const date = new Date(); // Date now
-						const anteriorDate = date.setDate(date.getDate() - 7); // Date now - 7 days
-						const dateString = date.toISOString().split('T')[0];
-						const anteriorDateString = anteriorDate.toISOString().split('T')[0];
+						const date = new Date();
+						const anteriorDate = new Date()
+						anteriorDate.setDate(date.getDate() - 7);
 
 						User.find(
 							{
 								createdAt: {
-									$gte: anteriorDateString,
-									$lt: dateString
+									$gte: anteriorDate,
+									$lt: date
 								}
 							}
 						)
@@ -251,15 +250,14 @@ exports.lastWeekReservations = [
 				.then((user)=> {
 					if (user.role === "ADMIN") {
 						const date = new Date(); // Date now
-						const anteriorDate = date.setDate(date.getDate() - 7); // Date now - 7 days
-						const dateString = date.toISOString().split('T')[0];
-						const anteriorDateString = anteriorDate.toISOString().split('T')[0];
+						const anteriorDate = new Date()
+						anteriorDate.setDate(date.getDate() - 7);
 
 						Reservation.find(
 							{
 								createdAt: {
-									$gte: anteriorDateString,
-									$lt: dateString
+									$gte: anteriorDate,
+									$lt: date
 								}
 							}
 						)
