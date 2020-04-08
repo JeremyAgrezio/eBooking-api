@@ -14,7 +14,8 @@ const UserSchema = new mongoose.Schema({
 	isConfirmed: {type: Boolean, required: true, default: 0},
 	confirmOTP: {type: String, required: false},
 	otpTries: {type: Number, required: false, default: 0},
-	status: {type: Boolean, required: true, default: 1}
+	status: {type: Boolean, required: true, default: 1},
+	role: {type: String, required: true, default: 'USER'}
 }, {timestamps: true});
 
 // Virtual for user's full name

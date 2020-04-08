@@ -78,14 +78,7 @@ exports.userUpdate = [
 		.isAlphanumeric().withMessage("Phone has non-alphanumeric characters."),
 	check("email").optional({ checkFalsy: true }).trim().isEmail().withMessage("Email must be a valid email address."),
 	check("picture").optional({ checkFalsy: true }).trim().isURL().withMessage("Picture must be a valid URL."),
-	body("firstName").escape(),
-	body("lastName").escape(),
-	body("address").escape(),
-	body("city").escape(),
-	body("country").escape(),
-	body("postalCode").escape(),
-	body("phone").escape(),
-	body("email").escape(),
+	body("*").escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
