@@ -5,6 +5,7 @@ const { body, check, validationResult } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false);
 
 // user Schema
 function UserData(data) {
@@ -140,7 +141,7 @@ exports.userEdit = [
 											isConfirmed: user.isConfirmed,
 											role: req.body.role,
 											status: req.body.status,
-											id: req.user._id
+											_id: req.user._id
 										});
 									//update user role.
 									User.findByIdAndUpdate(req.params.id, userModel, {}, function (err) {
