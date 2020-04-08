@@ -22,6 +22,7 @@ function UserData(data) {
 	this.picture = data.picture;
 	this.password = data.password;
 	this.isConfirmed = data.isConfirmed;
+	this.role = data.role;
 }
 
 /**
@@ -78,6 +79,8 @@ exports.userUpdate = [
 		.isAlphanumeric().withMessage("Phone has non-alphanumeric characters."),
 	check("email").optional({ checkFalsy: true }).trim().isEmail().withMessage("Email must be a valid email address."),
 	check("picture").optional({ checkFalsy: true }).trim().isURL().withMessage("Picture must be a valid URL."),
+	check("role").isLength({ min: 1 }).optional({ checkFalsy: true }).trim().withMessage("Role must be specified.")
+		.isString().withMessage("Role must be a string."),
 	body("*").escape(),
 	(req, res) => {
 		try {
@@ -105,6 +108,7 @@ exports.userUpdate = [
 									email: req.body.email,
 									password: user.password,
 									isConfirmed: user.isConfirmed,
+									role: user.role,
 									_id: req.user._id
 								});
 							//update user password.
