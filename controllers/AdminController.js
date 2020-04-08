@@ -140,7 +140,7 @@ exports.userEdit = [
 											isConfirmed: user.isConfirmed,
 											role: req.body.role,
 											status: req.body.status,
-											id: req.user._id
+											_id: user._id
 										});
 									//update user role.
 									User.findByIdAndUpdate(req.params.id, userModel, {}, function (err) {
