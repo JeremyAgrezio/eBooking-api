@@ -174,6 +174,7 @@ exports.userPasswordUpdate = [
 												email: user.email,
 												password: hash,
 												isConfirmed: user.isConfirmed,
+												role: user.role,
 												_id: req.user._id
 											});
 										//update user.

@@ -15,7 +15,7 @@ const folder = path.basename('../uploads');
  * @returns {Object}
  */
 exports.uploadFile = [
-	// auth,
+	auth,
 	function (req, res) {
 		try {
 			const form = new formidable.IncomingForm();
