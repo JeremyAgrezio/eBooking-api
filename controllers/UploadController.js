@@ -76,7 +76,7 @@ exports.uploadFiles = [
 				filesPath.set(i, files[i].filename );
 			}
 
-			return apiResponse.successResponse(res, Array.from(filesPath.values()));
+			return apiResponse.successResponseWithData(res, 'Upload Success', Array.from(filesPath.values()));
 		} catch (err) {
 			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
