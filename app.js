@@ -7,16 +7,7 @@ const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
-
-const
-	fs = require('fs'),
-	throttle = require('express-throttle-bandwidth')
-
-const folder = path.join(__dirname, 'uploads')
-
-if (!fs.existsSync(folder)) {
-	fs.mkdirSync(folder)
-}
+const throttle = require('express-throttle-bandwidth');
 
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -45,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-// app.use(express.static(path.join(__dirname, "files")));
+app.use('/uploads', express.static(path.join(__dirname + '/uploads')));
 
 //To allow cross-origin requests
 app.use(cors());
