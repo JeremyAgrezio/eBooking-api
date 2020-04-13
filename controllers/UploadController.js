@@ -73,7 +73,7 @@ exports.uploadFiles = [
 
 			const filesPath = new Map();
 			for (let i = 0, len = files.length; i < len; ++i) {
-				filesPath.set(i, files[i].path );
+				filesPath.set(i, files[i].filename );
 			}
 
 			return apiResponse.successResponse(res, Array.from(filesPath.values()));
