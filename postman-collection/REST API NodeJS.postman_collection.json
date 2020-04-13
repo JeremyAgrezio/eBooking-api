@@ -1536,6 +1536,49 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Upload files",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "multipart/form-data"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU4Njc5NDE3MywiZXhwIjoxNTg2ODgwNTczfQ.zgDzkpQFQcl_XCGCb0xqA5o9nYJR1cPrti2BKyxKEj8"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "multipleFiles",
+							"type": "file",
+							"src": "/home/jeremy/Images/lennart-berger-leesha-hannigan-knight-owl-artwork.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/upload/multiple",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"upload",
+						"multiple"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
