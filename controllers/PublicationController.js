@@ -1,5 +1,5 @@
-const Rent = require("../models/RentModel");
 const Publication = require("../models/PublicationModel");
+const Rent = require("../models/RentModel");
 const { body, check, validationResult } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
@@ -111,18 +111,20 @@ exports.publicationRegister = [
 							return apiResponse.ErrorResponse(res, "Rent doesn't have an associated lock");
 						}
 						else {
-							//Update rent.
-							Rent.findByIdAndUpdate(req.body.rent, {is_published: true}, {}, function (err) {
+							//Save publication.
+							publication.save(function (err) {
 								if (err) {
 									return apiResponse.ErrorResponse(res, err);
-								} else {
-									//Save publication.
-									publication.save(function (err) {
+								}
+								else {
+									const publicationData = new PublicationData(publication);
+
+									//Update rent.
+									Rent.findByIdAndUpdate(req.body.rent, {is_published: true, publication_id: publicationData.id}, {}, function (err) {
 										if (err) {
 											return apiResponse.ErrorResponse(res, err);
 										}
 
-										const publicationData = new PublicationData(publication);
 										return apiResponse.successResponseWithData(res, "Publication register Success.", publicationData);
 									});
 								}
@@ -237,7 +239,7 @@ exports.publicationDelete = [
 							if (err) {
 								return apiResponse.ErrorResponse(res, err);
 							} else {
-								Rent.findByIdAndUpdate(foundPublication.rent, { is_published: false }, {}, function (err) {
+								Rent.findByIdAndUpdate(foundPublication.rent, { is_published: false, publication_id: null }, {}, function (err) {
 									if (err) {
 										return apiResponse.ErrorResponse(res, err);
 									} else {
