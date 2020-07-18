@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Lock = require("../models/LockModel");
+const Publication = require("../models/LockModel");
 
 const Schema = mongoose.Schema;
 
@@ -15,6 +16,7 @@ const RentSchema = new Schema({
     country: {type: String, required: true},
     postalCode: {type: String, required: true},
     is_published: {type: Boolean, required: true, default: 0},
+    publication_id: {type: Schema.ObjectId, ref: "Publication"},
     is_rented: {type: Boolean, required: true, default: 0},
     associatedLock: {type: Schema.ObjectId, ref: "Lock"},
     owner: {type: Schema.ObjectId, ref: "User", required: true},
