@@ -4,6 +4,6 @@ exports.constants = {
 		email: "admin@admin.com"
 	},
 	confirmEmails: {
-		from : "no-reply@api-mail.com"
+		from : "mailer.api@orange.fr"
 	}
 };
