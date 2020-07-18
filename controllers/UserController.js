@@ -236,27 +236,28 @@ exports.userPasswordReset = [
 									_id: user._id
 								}
 							);
-							// Html email body
-							let html = `<p>Password reset.</p><p>New password: ${otp}</p>`;
-							// Send confirmation email
-							mailer.send(
-								constants.confirmEmails.from,
-								req.body.email,
-								"Password Reset",
-								html
-							).then(function(){
-								// Update user.
-								User.findOneAndUpdate({email: req.body.email}, userModel, {}, function (err) {
-									if (err) {
-										return apiResponse.ErrorResponse(res, err);
-									} else {
+
+							// Update user.
+							User.findOneAndUpdate({email: req.body.email}, userModel, {}, function (err) {
+								if (err) {
+									return apiResponse.ErrorResponse(res, err);
+								} else {
+									// Html email body
+									let html = `<p>Password reset.</p><p>New password: ${otp}</p>`;
+									// Send confirmation email
+									mailer.send(
+										constants.confirmEmails.from,
+										req.body.email,
+										"Password Reset",
+										html
+									).then(function(){
 										return apiResponse.successResponseWithData(res, "User Password Reset Success.");
-									}
-								});
-							}).catch(err => {
-								console.log(err);
-								return apiResponse.ErrorResponse(res,err);
-							}) ;
+									}).catch(err => {
+										console.log(err);
+										return apiResponse.ErrorResponse(res,err);
+									}) ;
+								}
+							});
 						});
 					} else {
 						return apiResponse.unauthorizedResponse(res, "Email address error.");
