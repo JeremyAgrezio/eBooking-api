@@ -13,6 +13,8 @@ mongoose.set("useFindAndModify", false);
 function ReservationData(data) {
 	this.id = data._id;
 	this.publication = data.publication;
+	this.start_at = data.start_at;
+	this.end_at = data.end_at;
 	this.tenant = data.tenant;
 	this.createdAt = data.createdAt;
 }
@@ -89,6 +91,8 @@ exports.reservationRegister = [
 			const errors = validationResult(req);
 			const reservation = new Reservation(
 				{ 	publication: req.body.publication,
+					start_at: req.body.start_at,
+					end_at: req.body.end_at,
 					tenant: req.user,
 				});
 
@@ -99,49 +103,80 @@ exports.reservationRegister = [
 			}
 			else {
 				Publication.findById(req.body.publication, function (err, foundPublication) {
-					if (foundPublication=== null) {
+					if (foundPublication === null) {
 						return apiResponse.notFoundResponse(res, "Publication not exists with this id");
-					} else {
-						Rent.findById(foundPublication.rent, function (err, foundRent) {
-							if (foundRent === null) {
-								return apiResponse.notFoundResponse(res, "Rent not exists with this id");
-							} else if (foundRent.is_rented === true) {
-								return apiResponse.unauthorizedResponse(res, "Rent is already reserved");
-							} else {
-								//update rent.
-								const update = {is_rented: true};
+					}
+					else {
+						const reservation_start = new Date(req.body.start_at)
+						const reservation_end = new Date(req.body.end_at)
+						const publication_start = new Date(foundPublication.start_at)
+						const publication_end = new Date(foundPublication.end_at)
 
-								Rent.findByIdAndUpdate(foundPublication.rent, update, {}, function (err) {
-									if (err) {
-										return apiResponse.ErrorResponse(res, err);
-									} else {
-										//Save reservation.
-										reservation.save(function (err) {
-											if (err) {
-												return apiResponse.ErrorResponse(res, err);
-											}
+						if (reservation_start < publication_start || reservation_end > publication_end){
+							return apiResponse.unauthorizedResponse(res, "Reserved date(s) outside publication range");
+						}
 
-											let reservationData = new ReservationData(reservation);
-
-											// Html email body
-											let html = `<p>Your ${foundRent.title} reservation is confirmed</p>`;
-
-											mailer.send(
-												constants.confirmEmails.from,
-												req.user.email,
-												"Reservation confirmation",
-												html
-											).then(function(){
-												return apiResponse.successResponseWithData(res, "Reservation register Success.", reservationData);
-											}).catch(err => {
-												console.log(err);
-												return apiResponse.ErrorResponse(res,err);
-											}) ;
-										});
+						Rent.findOne(
+							{
+								id: foundPublication.rent,
+								reservations: {
+									//Check if any of the dates the rent has been reserved for overlap with the requested dates
+									$not: {
+										$elemMatch: {from: {$lt: req.body.end_at.substring(0,10)}, to: {$gt: req.body.start_at.substring(0,10)}}
 									}
-								});
+								}
+							},
+							function (err, foundRent) {
+								if (foundRent === null) {
+									return apiResponse.notFoundResponse(res, "Rent not exists with this id or already reserved");
+								} else if (foundRent.is_rented === true) {
+									return apiResponse.unauthorizedResponse(res, "Rent is already reserved");
+								} else {
+									//update rent.
+									// const update = {is_rented: true};
+									const update = {};
+
+									Rent.findByIdAndUpdate(foundPublication.rent, update, {}, function (err) {
+										if (err) {
+											return apiResponse.ErrorResponse(res, err);
+										} else {
+											//Save reservation.
+											reservation.save(function (err) {
+												if (err) {
+													return apiResponse.ErrorResponse(res, err);
+												}
+
+												foundRent.reservations.push({from: reservation_start, to: reservation_end});
+												foundRent.save(function (err) {
+													if (err) {
+														return apiResponse.ErrorResponse(res, err);
+													}
+
+													let reservationData = new ReservationData(reservation);
+
+													// Html email body
+													let html =
+														`<p>Your ${foundRent.title} reservation from ${req.body.start_at} 						
+														to ${req.body.end_at} is confirmed</p>`;
+
+													mailer.send(
+														constants.confirmEmails.from,
+														req.user.email,
+														"Reservation confirmation",
+														html
+													).then(function(){
+														return apiResponse.successResponseWithData(res, "Reservation register Success.", reservationData);
+													}).catch(err => {
+														console.log(err);
+														return apiResponse.ErrorResponse(res,err);
+													});
+												})
+											});
+										}
+									});
+								}
 							}
-						});
+						);
 					}
 				});
 			}
