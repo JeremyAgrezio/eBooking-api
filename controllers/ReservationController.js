@@ -5,6 +5,8 @@ const { body, check, validationResult } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const mongoose = require("mongoose");
+const mailer = require("../helpers/mailer");
+const { constants } = require("../helpers/constants");
 mongoose.set("useFindAndModify", false);
 
 // Reservation Schema
@@ -118,8 +120,23 @@ exports.reservationRegister = [
 											if (err) {
 												return apiResponse.ErrorResponse(res, err);
 											}
+
 											let reservationData = new ReservationData(reservation);
-											return apiResponse.successResponseWithData(res, "Reservation register Success.", reservationData);
+
+											// Html email body
+											let html = `<p>Your ${foundRent.title} reservation is confirmed</p>`;
+
+											mailer.send(
+												constants.confirmEmails.from,
+												req.user.email,
+												"Reservation confirmation",
+												html
+											).then(function(){
+												return apiResponse.successResponseWithData(res, "Reservation register Success.", reservationData);
+											}).catch(err => {
+												console.log(err);
+												return apiResponse.ErrorResponse(res,err);
+											}) ;
 										});
 									}
 								});
