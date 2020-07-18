@@ -118,11 +118,11 @@ exports.reservationRegister = [
 
 						Rent.findOne(
 							{
-								id: foundPublication.rent,
+								_id: foundPublication.rent,
 								reservations: {
 									//Check if any of the dates the rent has been reserved for overlap with the requested dates
 									$not: {
-										$elemMatch: {from: {$lt: req.body.end_at.substring(0,10)}, to: {$gt: req.body.start_at.substring(0,10)}}
+										$elemMatch: {from: {$lt: reservation_end}, to: {$gt: reservation_start}}
 									}
 								}
 							},
