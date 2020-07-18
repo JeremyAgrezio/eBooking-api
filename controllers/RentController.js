@@ -19,6 +19,7 @@ function RentData(data) {
 	this.country = data.country;
 	this.postalCode = data.postalCode;
 	this.is_published = data.is_published;
+	this.publication_id = data.publication_id;
 	this.is_rented = data.is_rented;
 	this.associatedLock = data.associatedLock;
 	this.createdAt = data.createdAt;
@@ -33,7 +34,7 @@ exports.rentList = [
 	auth,
 	function (req, res) {
 		try {
-			Rent.find({owner: req.user._id},"_id title description capacity price pictures is_rented is_published")
+			Rent.find({owner: req.user._id},"_id title description capacity price pictures is_rented is_published publication_id")
 			.then((rents)=>{
 				if(rents.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", rents);
