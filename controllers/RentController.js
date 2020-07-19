@@ -20,7 +20,6 @@ function RentData(data) {
 	this.postalCode = data.postalCode;
 	this.is_published = data.is_published;
 	this.publication_id = data.publication_id;
-	this.is_rented = data.is_rented;
 	this.reservations = data.reservations;
 	this.associatedLock = data.associatedLock;
 	this.createdAt = data.createdAt;
