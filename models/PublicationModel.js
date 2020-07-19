@@ -13,9 +13,9 @@ PublicationSchema.statics.search = function (data, callback) {
     let query = this.find()
 
     Rent.find(data, function (error, rent) {
-        query.where(
-            {rent: rent}
-        ).exec(callback);
+        query.where({rent: rent})
+            .populate('rent', {'_id': 0, 'picture': 1, 'title': 1, 'city': 1, 'capacity': 1, 'price': 1, 'area': 1})
+            .exec(callback);
     })
     return query
 }
