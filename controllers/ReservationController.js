@@ -127,7 +127,7 @@ exports.reservationRegister = [
 							},
 							function (err, foundRent) {
 								if (foundRent === null) {
-									return apiResponse.notFoundResponse(res, "Rent not exists with this id or already reserved");
+									return apiResponse.notFoundResponse(res, "Rent is already reserved at this dates");
 								} else {
 									//Save reservation.
 									reservation.save(function (err) {
@@ -195,6 +195,8 @@ exports.reservationUpdate = [
 			const errors = validationResult(req);
 			const reservation = new Reservation(
 				{ 	publication: req.body.publication,
+					start_at: req.body.start_at,
+					end_at: req.body.end_at,
 					tenant: req.user,
 					_id:req.params.id
 				});
@@ -202,53 +204,71 @@ exports.reservationUpdate = [
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
 			}
-			else {
-				if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
-				}else{
-					Reservation.findById(req.params.id, function (err, foundReservation) {
-						if(foundReservation === null){
-							return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
-						}else{
-							//Check authorized user
-							if(foundReservation.tenant.toString() !== req.user._id){
-								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-							}else{
-								Publication.findById(req.body.publication, function (err, foundPublication) {
-									if (foundPublication=== null) {
-										return apiResponse.notFoundResponse(res, "Publication not exists with this id");
-									} else {
-										Rent.findById(foundPublication.rent, function (err, foundRent) {
-											if (foundRent === null) {
-												return apiResponse.notFoundResponse(res, "Rent not exists with this id");
-											} else {
-												//update rent.
-												const update = {is_rented: true};
-
-												Rent.findByIdAndUpdate(foundPublication.rent, update, {}, function (err) {
-													if (err) {
-														return apiResponse.ErrorResponse(res, err);
-													} else {
-														//update reservation.
-														Reservation.findByIdAndUpdate(req.params.id, reservation, {}, function (err) {
-															if (err) {
-																return apiResponse.ErrorResponse(res, err);
-															} else {
-																let reservationData = new ReservationData(reservation);
-																return apiResponse.successResponseWithData(res, "Reservation update Success.", reservationData);
-															}
-														});
-													}
-												});
-											}
-										});
-									}
-								});
-							}
-						}
-					});
-				}
+			else if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+				return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 			}
+
+			Reservation.findById(req.params.id, function (err, foundReservation) {
+				if(foundReservation === null){
+					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
+				}
+				else if(foundReservation.tenant.toString() !== req.user._id){
+					return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+				}
+
+				Publication.findById(req.body.publication, function (err, foundPublication) {
+					const reservation_start = new Date(req.body.start_at)
+					const reservation_end = new Date(req.body.end_at)
+					const publication_start = new Date(foundPublication.start_at)
+					const publication_end = new Date(foundPublication.end_at)
+
+					if (foundPublication=== null) {
+						return apiResponse.notFoundResponse(res, "Publication not exists with this id");
+					}
+				    else if(reservation_start < publication_start || reservation_end > publication_end) {
+						return apiResponse.unauthorizedResponse(res, "Reserved date(s) outside publication range");
+					}
+
+					Rent.findOneAndUpdate(
+						{
+							_id: foundPublication.rent,
+							reservations: {
+								//Check if any of the dates the rent has been reserved for overlap with the requested dates
+								$not: {
+									$elemMatch: {_id: {$ne: foundReservation},from: {$lt: reservation_end}, to: {$gt: reservation_start}}
+								}
+							},
+							"reservations._id": foundReservation.id
+						},
+						{$set: {'reservations.$.from': reservation_start, 'reservations.$.to': reservation_end,}}, // list fields you like to change
+						{'new': true, 'safe': true, 'upsert': true},
+						(err, foundRent) => {
+							if (foundRent === null || foundRent === undefined) {
+								return apiResponse.notFoundResponse(res, "Rent is already reserved at this dates");
+							}
+
+							foundReservation.updateOne(
+								reservation,
+								(err) => {
+									if (err) { return apiResponse.ErrorResponse(res, err) }
+
+									// Html email body
+									const html =
+										`<p>Your ${foundRent.title} reservation from ${req.body.start_at} 						
+										to ${req.body.end_at} has been updated</p>`;
+
+									mailer.send( constants.confirmEmails.from, req.user.email, "Reservation updated", html )
+									.then(function () {
+										const reservationData = new ReservationData(reservation);
+										return apiResponse.successResponseWithData(res, "Reservation update Success.", reservationData);
+									})
+									.catch(err => {	return apiResponse.ErrorResponse(res, err);	});
+								}
+							);
+						}
+					);
+				});
+			});
 		} catch (err) {
 			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
@@ -277,32 +297,28 @@ exports.reservationDelete = [
 					//Check authorized user
 					if(foundReservation.tenant.toString() !== req.user._id){
 						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-					}else{
-						Publication.findById(foundReservation.publication, function (err, foundPublication) {
-							if (foundPublication=== null) {
-								return apiResponse.notFoundResponse(res, "Publication not exists with this id");
-							} else {
-								Rent.findOneAndUpdate(
-									{"reservations._id": foundReservation.id },
-									{ "$pull": { "reservations": { "_id": foundReservation.id } }},
-									{ safe: true, multi:true } ,
-									function (err, foundRent) {
-										if (foundRent === null) {
-											return apiResponse.notFoundResponse(res, "Rent not exists with this id");
-										} else {
-											//delete reservation.
-											Reservation.findByIdAndRemove(req.params.id, function (err) {
-												if (err) {
-													return apiResponse.ErrorResponse(res, err);
-												} else {
-													return apiResponse.successResponse(res, "Reservation delete Success.");
-												}
-											});
-										}
-								});
-							}
-						});
 					}
+
+					Rent.findOneAndUpdate(
+						{ "reservations._id": foundReservation.id },
+						{ "$pull": { "reservations": { "_id": foundReservation.id } }},
+						{ safe: true, multi: true } ,
+						function (err, foundRent) {
+							if (foundRent === null) {
+								return apiResponse.notFoundResponse(res, "Rent not exists with this id");
+							} else {
+								//delete reservation.
+								foundReservation.deleteOne(
+									(err) => {
+										if (err) {
+											return apiResponse.ErrorResponse(res, err);
+										} else {
+											return apiResponse.successResponse(res, "Reservation delete Success.");
+										}
+									}
+								);
+							}
+					});
 				}
 			});
 		} catch (err) {
