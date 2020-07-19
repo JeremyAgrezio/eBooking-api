@@ -128,50 +128,43 @@ exports.reservationRegister = [
 							function (err, foundRent) {
 								if (foundRent === null) {
 									return apiResponse.notFoundResponse(res, "Rent not exists with this id or already reserved");
-								} else if (foundRent.is_rented === true) {
-									return apiResponse.unauthorizedResponse(res, "Rent is already reserved");
 								} else {
-									//update rent.
-									// const update = {is_rented: true};
-									const update = {};
-
-									Rent.findByIdAndUpdate(foundPublication.rent, update, {}, function (err) {
+									//Save reservation.
+									reservation.save(function (err) {
 										if (err) {
 											return apiResponse.ErrorResponse(res, err);
-										} else {
-											//Save reservation.
-											reservation.save(function (err) {
-												if (err) {
-													return apiResponse.ErrorResponse(res, err);
-												}
-
-												foundRent.reservations.push({from: reservation_start, to: reservation_end});
-												foundRent.save(function (err) {
-													if (err) {
-														return apiResponse.ErrorResponse(res, err);
-													}
-
-													let reservationData = new ReservationData(reservation);
-
-													// Html email body
-													let html =
-														`<p>Your ${foundRent.title} reservation from ${req.body.start_at} 						
-														to ${req.body.end_at} is confirmed</p>`;
-
-													mailer.send(
-														constants.confirmEmails.from,
-														req.user.email,
-														"Reservation confirmation",
-														html
-													).then(function(){
-														return apiResponse.successResponseWithData(res, "Reservation register Success.", reservationData);
-													}).catch(err => {
-														console.log(err);
-														return apiResponse.ErrorResponse(res,err);
-													});
-												})
-											});
 										}
+
+										const reservationData = new ReservationData(reservation);
+
+										//Update rent reservations.
+										foundRent.reservations.push({
+											_id: reservationData.id,
+											from: reservation_start,
+											to: reservation_end
+										});
+
+										foundRent.save(function (err) {
+											if (err) {
+												return apiResponse.ErrorResponse(res, err);
+											}
+
+											// Html email body
+											const html =
+												`<p>Your ${foundRent.title} reservation from ${req.body.start_at} 						
+												to ${req.body.end_at} is confirmed</p>`;
+
+											mailer.send(
+												constants.confirmEmails.from,
+												req.user.email,
+												"Reservation confirmation",
+												html
+											).then(function () {
+												return apiResponse.successResponseWithData(res, "Reservation register Success.", reservationData);
+											}).catch(err => {
+												return apiResponse.ErrorResponse(res, err);
+											});
+										});
 									});
 								}
 							}
@@ -289,28 +282,23 @@ exports.reservationDelete = [
 							if (foundPublication=== null) {
 								return apiResponse.notFoundResponse(res, "Publication not exists with this id");
 							} else {
-								Rent.findById(foundPublication.rent, function (err, foundRent) {
-									if (foundRent === null) {
-										return apiResponse.notFoundResponse(res, "Rent not exists with this id");
-									} else {
-										//update rent.
-										const update = {is_rented: false};
-
-										Rent.findByIdAndUpdate(foundPublication.rent, update, {}, function (err) {
-											if (err) {
-												return apiResponse.ErrorResponse(res, err);
-											} else {
-												//delete reservation.
-												Reservation.findByIdAndRemove(req.params.id, function (err) {
-													if (err) {
-														return apiResponse.ErrorResponse(res, err);
-													} else {
-														return apiResponse.successResponse(res, "Reservation delete Success.");
-													}
-												});
-											}
-										});
-									}
+								Rent.findOneAndUpdate(
+									{"reservations._id": foundReservation.id },
+									{ "$pull": { "reservations": { "_id": foundReservation.id } }},
+									{ safe: true, multi:true } ,
+									function (err, foundRent) {
+										if (foundRent === null) {
+											return apiResponse.notFoundResponse(res, "Rent not exists with this id");
+										} else {
+											//delete reservation.
+											Reservation.findByIdAndRemove(req.params.id, function (err) {
+												if (err) {
+													return apiResponse.ErrorResponse(res, err);
+												} else {
+													return apiResponse.successResponse(res, "Reservation delete Success.");
+												}
+											});
+										}
 								});
 							}
 						});
