@@ -38,7 +38,7 @@ function RentData(data) {
 	this.country = data.country;
 	this.postalCode = data.postalCode;
 	this.is_published = data.is_published;
-	this.is_rented = data.is_rented;
+	this.reservations = data.reservations;
 	this.associatedLock = data.associatedLock;
 	this.createdAt = data.createdAt;
 }

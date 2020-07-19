@@ -17,7 +17,6 @@ const RentSchema = new Schema({
     postalCode: {type: String, required: true},
     is_published: {type: Boolean, required: true, default: 0},
     publication_id: {type: Schema.ObjectId, ref: "Publication"},
-    is_rented: {type: Boolean, required: true, default: 0},
     reservations : [{_id: Schema.ObjectId, from: Date, to: Date}],
     associatedLock: {type: Schema.ObjectId, ref: "Lock"},
     owner: {type: Schema.ObjectId, ref: "User", required: true},
