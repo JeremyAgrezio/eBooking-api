@@ -421,7 +421,8 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NDI4MDc3NiwiZXhwIjoxNTg0MzY3MTc2fQ.cATDsFmovLZ7-rRIYptX5rEXA3FCE8K3l2Vqrukyn44"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NDI4MDc3NiwiZXhwIjoxNTg0MzY3MTc2fQ.cATDsFmovLZ7-rRIYptX5rEXA3FCE8K3l2Vqrukyn44",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -470,7 +471,7 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM"
 							}
 						],
 						"body": {
@@ -615,7 +616,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM",
 								"type": "text"
 							}
 						],
@@ -680,7 +681,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/rent/5e89dc2b1bc06d0adfafd52f",
+							"raw": "http://localhost:3000/api/rent/5f12f89abb285871e9953d59",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -689,7 +690,7 @@
 							"path": [
 								"api",
 								"rent",
-								"5e89dc2b1bc06d0adfafd52f"
+								"5f12f89abb285871e9953d59"
 							]
 						}
 					},
@@ -742,7 +743,7 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTkwNTkxMiwiZXhwIjoxNTg1OTkyMzEyfQ.LwY-Ftj0opLgBoekChMbo1Hkh03PuTpQbqdrb7ZF8xw"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM"
 							}
 						],
 						"body": {
@@ -750,7 +751,7 @@
 							"urlencoded": [
 								{
 									"key": "rent",
-									"value": "5e8716b451c26d2a82b49c31",
+									"value": "5f12f89abb285871e9953d59",
 									"type": "text"
 								},
 								{
@@ -807,6 +808,38 @@
 					"response": []
 				},
 				{
+					"name": "Publication Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/publication?city=Bordeaux",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publication"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "Bordeaux"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Publication Detail",
 					"request": {
 						"method": "GET",
@@ -846,7 +879,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ3ODY0NSwiZXhwIjoxNTgyNTY1MDQ1fQ.OsJ7d0j6WhXq354iNNB0DZPgIphqMnYM5Mb5On3TklM",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM",
 								"type": "text"
 							}
 						],
@@ -855,7 +888,7 @@
 							"urlencoded": [
 								{
 									"key": "rent",
-									"value": "5e52af0761b1623d0e414ccc",
+									"value": "5f12f89abb285871e9953d59",
 									"type": "text"
 								},
 								{
@@ -871,7 +904,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/publication/5e5285e1075bea3b684ea0d6",
+							"raw": "http://localhost:3000/api/publication/5f12f99bbd57667287dbdd93",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -880,7 +913,7 @@
 							"path": [
 								"api",
 								"publication",
-								"5e5285e1075bea3b684ea0d6"
+								"5f12f99bbd57667287dbdd93"
 							]
 						}
 					},
@@ -912,6 +945,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Publication List Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/publication",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publication"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -933,7 +992,7 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM"
 							}
 						],
 						"body": {
@@ -941,7 +1000,17 @@
 							"urlencoded": [
 								{
 									"key": "publication",
-									"value": "5e64af158e897c5b7d915719",
+									"value": "5f12f99bbd57667287dbdd93",
+									"type": "text"
+								},
+								{
+									"key": "start_at",
+									"value": "2020-02-01",
+									"type": "text"
+								},
+								{
+									"key": "end_at",
+									"value": "2020-02-09",
 									"type": "text"
 								}
 							]
@@ -1027,7 +1096,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjYzNDc0MiwiZXhwIjoxNTgyNzIxMTQyfQ.PJJrO60A_JEPeP-jF2y9NHex93pzBNyYheh0Uy9yApY",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM",
 								"type": "text"
 							}
 						],
@@ -1037,6 +1106,16 @@
 								{
 									"key": "publication",
 									"value": "5e55172e1099044677a6a75c",
+									"type": "text"
+								},
+								{
+									"key": "start_at",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "end_at",
+									"value": "",
 									"type": "text"
 								}
 							]
