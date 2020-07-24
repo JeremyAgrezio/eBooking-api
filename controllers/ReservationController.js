@@ -33,6 +33,14 @@ exports.reservationList = [
 	function (req, res) {
 		try {
 			Reservation.find({tenant: req.user._id}, {'createdAt': 0})
+			.populate({
+				path: 'publication',
+				populate: {
+					path: 'rent',
+					select: {'pictures': 1, '_id': 0},
+				},
+				select: '_id'
+			})
 			.then((reservations)=>{
 				if(reservations.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", reservations);
@@ -62,7 +70,14 @@ exports.reservationDetail = [
 		}
 		try {
 			Reservation.findOne({_id: req.params.id,tenant: req.user._id}, {})
-			.populate('publication', {'createdAt': 0, 'updatedAt': 0, '__v': 0})
+			.populate({
+				path: 'publication',
+				populate: {
+					path: 'rent',
+					select: 'pictures',
+				},
+				select: {'_id': 1, 'start_at': 1, 'end_at': 1}
+			})
 			.then((reservation)=>{
 				if(reservation !== null){
 					let reservationData = new ReservationData(reservation);
