@@ -106,7 +106,7 @@ exports.userUpdate = [
 									picture: req.body.picture,
 									password: user.password,
 									isConfirmed: user.isConfirmed,
-									id: req.user._id
+									_id: req.user._id
 								});
 							//update user password.
 							User.findByIdAndUpdate(req.user, userModel, {}, function (err) {
