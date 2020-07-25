@@ -22,6 +22,7 @@ function UserData(data) {
 	this.picture = data.picture;
 	this.password = data.password;
 	this.isConfirmed = data.isConfirmed;
+	this.role = data.role;
 }
 
 /**
@@ -93,6 +94,7 @@ exports.userUpdate = [
 						if (user._id.toString() !== req.user._id) {
 							return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 						} else {
+							console.log(user);
 							const userModel = new User(
 								{
 									firstName: req.body.firstName,
@@ -106,6 +108,7 @@ exports.userUpdate = [
 									picture: req.body.picture,
 									password: user.password,
 									isConfirmed: user.isConfirmed,
+									role: user.role,
 									_id: req.user._id
 								});
 							//update user password.
