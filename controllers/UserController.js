@@ -103,6 +103,7 @@ exports.userUpdate = [
 									postalCode: req.body.postalCode,
 									phone: req.body.phone,
 									email: req.body.email,
+									picture: req.body.picture,
 									password: user.password,
 									isConfirmed: user.isConfirmed,
 									id: req.user._id
@@ -219,8 +220,6 @@ exports.userPasswordReset = [
 					if (user) {
 						let otp = utility.randomNumber(6).toString();
 						bcrypt.hash(otp,10,function(err, hash) {
-							console.log(otp)
-							console.log(hash)
 							let userModel = new User(
 								{
 									firstName: user.firstName,
@@ -253,7 +252,6 @@ exports.userPasswordReset = [
 									).then(function(){
 										return apiResponse.successResponseWithData(res, "User Password Reset Success.");
 									}).catch(err => {
-										console.log(err);
 										return apiResponse.ErrorResponse(res,err);
 									}) ;
 								}
