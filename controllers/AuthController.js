@@ -82,7 +82,6 @@ exports.register = [
 							return apiResponse.successResponseWithData(res,"Registration Success.", userData);
 						});
 					}).catch(err => {
-						console.log(err);
 						return apiResponse.ErrorResponse(res,err);
 					}) ;
 				});

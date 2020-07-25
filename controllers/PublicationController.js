@@ -116,7 +116,6 @@ exports.publicationRegister = [
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid rent ID");
 				} else {
 					Rent.findById(req.body.rent, function (err, rent) {
-						console.log(rent);
 						if (err) {
 							return apiResponse.ErrorResponse(res, err);
 						}

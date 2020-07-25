@@ -109,7 +109,6 @@ exports.reservationRegister = [
 			const errors = validationResult(req);
 			const reservation_start = new Date(req.body.start_at)
 			const reservation_end = new Date(req.body.end_at)
-			console.log(req.body.publication);
 
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
