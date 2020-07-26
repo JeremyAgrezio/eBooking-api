@@ -19,6 +19,7 @@
     "express-jwt": "^6.0.0",
     "express-throttle-bandwidth": "^1.0.1",
     "express-validator": "^6.4.0",
+    "formidable": "latest",
     "jsonwebtoken": "^8.5.1",
     "localtunnel": "^2.0.0",
     "mocha-lcov-reporter": "^1.3.0",
@@ -27,8 +28,7 @@
     "morgan": "~1.9.0",
     "multer": "latest",
     "nodemailer": "^6.4.6",
-    "ws": "^7.2.3",
-    "formidable": "latest"
+    "ws": "^7.3.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
