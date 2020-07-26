@@ -97,17 +97,16 @@ exports.rentDetail = [
  */
 exports.rentRegister = [
 	auth,
-	check("title", "Title must not be empty.").isLength({ min: 1 }).trim(),
-	check("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
-	check("capacity", "Capacity must not be empty.").isInt({ min: 1 }).trim(),
-	check("price", "Price must not be empty.").isInt({ min: 1 }).trim(),
-	check("area", "Area must not be empty.").isInt({ min: 1 }).trim(),
-	check("pictures", "Pictures must not be empty.").trim(),
-	check("address", "Address must not be empty.").isLength({ min: 1 }).trim(),
-	check("city", "City must not be empty.").isLength({ min: 1 }).trim(),
-	check("country", "Country must not be empty.").isLength({ min: 1 }).trim(),
-	check("postalCode", "Postal code must not be empty.").isLength({ min: 1 }).trim(),
-	body("*").escape(),
+	check("title", "Title must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("description", "Description must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("capacity", "Capacity must not be empty.").isInt({ min: 1 }).trim().escape(),
+	check("price", "Price must not be empty.").isInt({ min: 1 }).trim().escape(),
+	check("area", "Area must not be empty.").isInt({ min: 1 }).trim().escape(),
+	check("pictures", "Pictures must not be empty.").isLength({ min: 1 }),
+	check("address", "Address must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("city", "City must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("country", "Country must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("postalCode", "Postal code must not be empty.").isLength({ min: 1 }).trim().escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
@@ -173,17 +172,16 @@ exports.rentRegister = [
  */
 exports.rentUpdate = [
 	auth,
-	check("title", "Title must not be empty.").isLength({ min: 1 }).trim(),
-	check("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
-	check("capacity", "Capacity must not be empty.").isInt({ min: 1 }).trim(),
-	check("price", "Price must not be empty.").isInt({ min: 1 }).trim(),
-	check("area", "Area must not be empty.").isInt({ min: 1 }).trim(),
-	check("pictures", "Pictures must not be empty.").isLength({ min: 1 }).trim(),
-	check("address", "Address must not be empty.").isLength({ min: 1 }).trim(),
-	check("city", "City must not be empty.").isLength({ min: 1 }).trim(),
-	check("country", "Country must not be empty.").isLength({ min: 1 }).trim(),
-	check("postalCode", "Postal code must not be empty.").isLength({ min: 1 }).trim(),
-	body("*").escape(),
+	check("title", "Title must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("description", "Description must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("capacity", "Capacity must not be empty.").isInt({ min: 1 }).trim().escape(),
+	check("price", "Price must not be empty.").isInt({ min: 1 }).trim().escape(),
+	check("area", "Area must not be empty.").isInt({ min: 1 }).trim().escape(),
+	check("pictures", "Pictures must not be empty.").isLength({ min: 1 }),
+	check("address", "Address must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("city", "City must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("country", "Country must not be empty.").isLength({ min: 1 }).trim().escape(),
+	check("postalCode", "Postal code must not be empty.").isLength({ min: 1 }).trim().escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
