@@ -102,7 +102,7 @@ exports.rentRegister = [
 	check("capacity", "Capacity must not be empty.").isInt({ min: 1 }).trim().escape(),
 	check("price", "Price must not be empty.").isInt({ min: 1 }).trim().escape(),
 	check("area", "Area must not be empty.").isInt({ min: 1 }).trim().escape(),
-	check("pictures", "Pictures must not be empty.").isLength({ min: 1 }),
+	check("pictures"),
 	check("address", "Address must not be empty.").isLength({ min: 1 }).trim().escape(),
 	check("city", "City must not be empty.").isLength({ min: 1 }).trim().escape(),
 	check("country", "Country must not be empty.").isLength({ min: 1 }).trim().escape(),
@@ -135,6 +135,9 @@ exports.rentRegister = [
 					}
 				}
 				else {
+					if(req.body.pictures.length < 1){
+						return apiResponse.requiredNotFound(res, "Pictures required");
+					}
 					//Save rent.
 					rent.save(function (err) {
 						if (err) {
@@ -177,7 +180,7 @@ exports.rentUpdate = [
 	check("capacity", "Capacity must not be empty.").isInt({ min: 1 }).trim().escape(),
 	check("price", "Price must not be empty.").isInt({ min: 1 }).trim().escape(),
 	check("area", "Area must not be empty.").isInt({ min: 1 }).trim().escape(),
-	check("pictures", "Pictures must not be empty.").isLength({ min: 1 }),
+	check("pictures"),
 	check("address", "Address must not be empty.").isLength({ min: 1 }).trim().escape(),
 	check("city", "City must not be empty.").isLength({ min: 1 }).trim().escape(),
 	check("country", "Country must not be empty.").isLength({ min: 1 }).trim().escape(),
@@ -218,6 +221,10 @@ exports.rentUpdate = [
 								if (foundRent.owner.toString() !== req.user._id) {
 									return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 								} else {
+									if(req.body.pictures.length < 1){
+										return apiResponse.requiredNotFound(res, "Pictures required");
+									}
+
 									//update rent.
 									Rent.findByIdAndUpdate(req.params.id, rent, {}, function (err) {
 										if (err) {

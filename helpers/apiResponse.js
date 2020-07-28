@@ -47,3 +47,11 @@ exports.unauthorizedResponse = function (res, msg) {
 	};
 	return res.status(401).json(data);
 };
+
+exports.requiredNotFound = function (res, msg) {
+	const data = {
+		status: 0,
+		message: msg,
+	};
+	return res.status(406).json(data);
+};
