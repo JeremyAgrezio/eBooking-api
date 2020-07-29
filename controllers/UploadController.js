@@ -45,7 +45,9 @@ exports.uploadFile = [
 				return apiResponse.ErrorResponse(res, err)
 			}
 
-			return apiResponse.successResponseWithData(res, 'Upload success !', file.path);
+			const result = { title: file.originalname, ref: file.path };
+
+			return apiResponse.successResponseWithData(res, 'Upload success !', result);
 		} catch (err) {
 			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
@@ -73,7 +75,7 @@ exports.uploadFiles = [
 
 			const filesPath = new Map();
 			for (let i = 0, len = files.length; i < len; ++i) {
-				filesPath.set(i, files[i].filename );
+				filesPath.set(i, { title: files[i].originalname, ref: files[i].filename } );
 			}
 
 			return apiResponse.successResponseWithData(res, 'Upload Success', Array.from(filesPath.values()));
