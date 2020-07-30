@@ -8,6 +8,7 @@ const ReservationSchema = new Schema({
     rent: {
         title: {type: String, required: true},
         price: {type: Number, required: true},
+        fullPrice: {type: Number, required: true},
     },
     start_at: {type: Date, required: true},
     end_at: {type: Date, required: true},

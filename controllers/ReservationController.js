@@ -15,7 +15,8 @@ function ReservationData(data) {
 	this.publication = data.publication;
 	this.rent = {
 		title: data.title,
-		price: data.price
+		price: data.price,
+		fullPrice: data.fullPrice,
 	};
 	this.start_at = data.start_at;
 	this.end_at = data.end_at;
@@ -126,6 +127,8 @@ exports.reservationRegister = [
 						return apiResponse.unauthorizedResponse(res, "Reserved date(s) outside publication range");
 					}
 
+					const totalDays = (reservation_end.getTime() - reservation_start.getTime()) / (1000 * 3600 * 24);
+
 					Rent.findOne(
 						{
 							_id: foundPublication.rent,
@@ -147,6 +150,7 @@ exports.reservationRegister = [
 									rent: {
 										title: foundRent.title,
 										price: foundRent.price,
+										fullPrice: foundRent.price * totalDays,
 									},
 									end_at: req.body.end_at,
 									tenant: req.user,
@@ -243,6 +247,8 @@ exports.reservationUpdate = [
 						return apiResponse.unauthorizedResponse(res, "Reserved date(s) outside publication range");
 					}
 
+					const totalDays = (reservation_end.getTime() - reservation_start.getTime()) / (1000 * 3600 * 24);
+
 					Rent.findOneAndUpdate(
 						{
 							_id: foundPublication.rent,
@@ -266,6 +272,7 @@ exports.reservationUpdate = [
 									rent: {
 										title: foundRent.title,
 										price: foundRent.price,
+										fullPrice: foundRent.price * totalDays,
 									},
 									start_at: req.body.start_at,
 									end_at: req.body.end_at,
