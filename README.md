@@ -1,1 +1,1 @@
-eBooking-api, première itération
+eBooking-api school project
