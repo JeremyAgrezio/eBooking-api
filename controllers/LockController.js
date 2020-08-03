@@ -78,24 +78,21 @@ exports.lockDetail = [
  * Lock register.
  *
  * @param {string} name
- * @param {string} address
- * @param {string} auth
+ * @param {string} serial
  *
  * @returns {Object}
  */
 exports.lockRegister = [
 	auth,
 	check("name", "Lock name must not be empty.").isLength({ min: 1 }).trim(),
-	check("address", "Lock network address must not be empty.").isLength({ min: 1 }).trim(),
-	check("auth", "Lock authentication must not be empty.").isLength({ min: 1 }).trim(),
+	check("serial", "Lock network address must not be empty.").isLength({ min: 1 }).trim(),
 	body("*").escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
 			const lock = new Lock(
 				{ 	name: req.body.name,
-					address: req.body.address,
-					auth: req.body.auth,
+					serial: req.body.serial,
 					owner: req.user,
 				});
 
@@ -122,24 +119,21 @@ exports.lockRegister = [
  *
  * @param {string} id
  * @param {string} name
- * @param {string} address
- * @param {string} auth
+ * @param {string} serial
  *
  * @returns {Object}
  */
 exports.lockUpdate = [
 	auth,
 	check("name", "Lock name must not be empty.").isLength({ min: 1 }).trim(),
-	check("address", "Lock network address must not be empty.").isLength({ min: 1 }).trim(),
-	check("auth", "Lock authentication must not be empty.").isLength({ min: 1 }).trim(),
+	check("serial", "Lock network address must not be empty.").isLength({ min: 1 }).trim(),
 	body("*").escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
 			const lock = new Lock(
 				{ 	name: req.body.name,
-					address: req.body.address,
-					auth: req.body.auth,
+					serial: req.body.serial,
 					owner: req.user,
 				});
 
