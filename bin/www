@@ -4,74 +4,110 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('rest-api-nodejs-mongodb:server');
-var http = require('http');
-var WebSocket = require('ws');
+const app = require('../app');
+const mongoose = require("mongoose");
+const debug = require('debug')('rest-api-nodejs-mongodb:server');
+const http = require('http');
+const WebSocket = require('ws');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+
+/**
+ * Connect to Mongo cluster.
+ */
+
+const MONGODB_URL = process.env.MONGODB_URL;
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+  //don't show the log when it is test
+  if(process.env.NODE_ENV !== "test") {
+    console.log("Connected to distant cluster");
+    console.log("App is running ... \n");
+    console.log("Press CTRL + C to stop the process. \n");
+  }
+})
+    .catch(err => {
+      console.error("App starting error:", err.message);
+      process.exit(1);
+    });
+const db = mongoose.connection;
+
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 
 /**
  * Create Websocket server.
  */
 
-var wss = new WebSocket.Server({
-  server,
-  perMessageDeflate: {
-    zlibDeflateOptions: {
-      chunkSize: 1024,
-      memLevel: 7,
-      level: 3
-    },
-    zlibInflateOptions: {
-      chunkSize: 10 * 1024
-    },
-    clientNoContextTakeover: true,
-    serverNoContextTakeover: true,
-    serverMaxWindowBits: 10,
-    concurrencyLimit: 10,
-    threshold: 1024
-  }
-});
+let wss;
 
-console.log('Websocket server listen on: ' + 12730)
+//don't show the log when it is test
+if(process.env.NODE_ENV !== "dev") {
+  wss = new WebSocket.Server({
+    server,
+    perMessageDeflate: {
+      zlibDeflateOptions: {
+        chunkSize: 1024,
+        memLevel: 7,
+        level: 3
+      },
+      zlibInflateOptions: {
+        chunkSize: 10 * 1024
+      },
+      clientNoContextTakeover: true,
+      serverNoContextTakeover: true,
+      serverMaxWindowBits: 10,
+      concurrencyLimit: 10,
+      threshold: 1024
+    }
+  });
+} else {
+  wss = new WebSocket.Server({
+    port: 12730,
+    perMessageDeflate: {
+      zlibDeflateOptions: {
+        chunkSize: 1024,
+        memLevel: 7,
+        level: 3
+      },
+      zlibInflateOptions: {
+        chunkSize: 10 * 1024
+      },
+      clientNoContextTakeover: true,
+      serverNoContextTakeover: true,
+      serverMaxWindowBits: 10,
+      concurrencyLimit: 10,
+      threshold: 1024
+    }
+  });
+}
 
-let latches = [];
-let latchesID = [];
+console.log('Websocket server listen :')
+
+locks = [];
+locksID = [];
 
 wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-    latchesID.push(message)
-    // sendSomeData(message)
+  ws.on('message', function incoming(ref) {
+    console.log('Received: %s', ref);
+    locksID.push(ref)
   });
-  ws.send('Connected to JS server. Listening:')
-  latches.push(ws)
+  ws.send('Connected to websocket server. Listening:')
+  locks.push(ws)
 });
-
-function sendSomeData(UUID){
-  for(latch in latchesID){
-    if(latchesID[latch] === UUID){
-      latches[latch].send(UUID + ' open door !')
-    }
-  }
-}
 
 wss.on('close', function deconnection(ws){
   ws.on('message', function incoming(message){
-    console.log('received: %s', message);
+    console.log('Received: %s', message);
   })
   ws.send('Bye!')
 })
@@ -89,7 +125,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -113,7 +149,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -137,8 +173,8 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  const addr = server.address();
+  let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
