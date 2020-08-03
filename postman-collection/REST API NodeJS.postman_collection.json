@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "24c457ae-83f2-4222-a5d4-f28e306ed126",
+		"_postman_id": "c7677b71-5cdc-4541-affb-9bfb8f00af65",
 		"name": "REST API NodeJS",
 		"description": "A boilerplate for REST API Development with Node.js and Expressjs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -757,7 +757,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo",
 								"type": "text"
 							}
 						],
@@ -935,7 +935,7 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo"
 							}
 						],
 						"body": {
@@ -943,17 +943,17 @@
 							"urlencoded": [
 								{
 									"key": "publication",
-									"value": "5f12f99bbd57667287dbdd93",
+									"value": "5f229fc3dfbd9400828b7956",
 									"type": "text"
 								},
 								{
 									"key": "start_at",
-									"value": "2020-02-01",
+									"value": "2020-07-01",
 									"type": "text"
 								},
 								{
 									"key": "end_at",
-									"value": "2020-02-09",
+									"value": "2020-07-15",
 									"type": "text"
 								}
 							]
@@ -980,7 +980,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo",
 								"type": "text"
 							}
 						],
@@ -1138,15 +1138,16 @@
 									"type": "text"
 								},
 								{
-									"key": "address",
-									"value": "lock1.duckdns.org",
+									"key": "serial",
+									"value": "00000000d01d22f0",
 									"description": "Network address",
 									"type": "text"
 								},
 								{
 									"key": "auth",
 									"value": "auth",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -1244,14 +1245,9 @@
 									"type": "text"
 								},
 								{
-									"key": "address",
+									"key": "serial",
 									"value": "",
 									"description": "Network address",
-									"type": "text"
-								},
-								{
-									"key": "auth",
-									"value": "",
 									"type": "text"
 								}
 							]
@@ -1300,12 +1296,9 @@
 					"response": []
 				},
 				{
-					"name": "Lock Unlock",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Lock Open",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -1315,15 +1308,21 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTg0MDQ0NiwiZXhwIjoxNTg1OTI2ODQ2fQ.OyJZ_oAU3TJWwNeOSuhgYGJ_d_zxGJhQFgJjMtWZyfA"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3MzIwMywiZXhwIjoxNTk2NTU5NjAzfQ.ivKPCXD9dO1gnd9n7MW67gCN_j7V8Aaexm-pQVJzHOw"
 							}
 						],
 						"body": {
 							"mode": "urlencoded",
-							"urlencoded": []
+							"urlencoded": [
+								{
+									"key": "reservation",
+									"value": "5f284cc5eebda41f1bf0e308",
+									"type": "text"
+								}
+							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/lock/",
+							"raw": "http://localhost:3000/api/lock/open",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1332,7 +1331,49 @@
 							"path": [
 								"api",
 								"lock",
-								""
+								"open"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lock Close",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3MzIwMywiZXhwIjoxNTk2NTU5NjAzfQ.ivKPCXD9dO1gnd9n7MW67gCN_j7V8Aaexm-pQVJzHOw"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "reservation",
+									"value": "5f284cc5eebda41f1bf0e308",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/lock/close",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"lock",
+								"close"
 							]
 						}
 					},
