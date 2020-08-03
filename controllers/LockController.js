@@ -1,4 +1,6 @@
 const Lock = require("../models/LockModel");
+const Reservation = require("../models/ReservationModel");
+const Rent = require("../models/RentModel");
 const { body, check, validationResult } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
@@ -217,27 +219,121 @@ exports.lockDelete = [
 	}
 ];
 
+function CloseDoor(ref){
+	for (lock in locksID){
+		if(locksID[lock] === ref){
+			locks[lock].send(ref + ' close')
+		}
+	}
+}
+
+
+// TODO Add date verification
+
 /**
- * Open lock.
+ * Open Lock.
+ *
+ * @param {string} reservation
  *
  * @returns {Object}
  */
 exports.lockOpen = [
 	auth,
+	check("reservation", "Reservation must not be empty.").isLength({ min: 1 }).trim(),
+	body("*").escape(),
 	function (req, res) {
-		const ws = new WebSocket('wss://' + process.env.DOOR_WEBSOCKET + '/ws');
-		ws.onopen = function(evt) {
-			console.log("WEBSOCKET STATUS: Connected");
-			ws.send("on_g");
-		};
+		if(!mongoose.Types.ObjectId.isValid(req.body.reservation)){
+			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
+		}
+		try {
+			Reservation.findById(req.body.reservation, function (err, foundReservation) {
+				if(foundReservation === null){
+					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
+				}else{
+					//Check authorized user
+					if(foundReservation.tenant.toString() !== req.user._id){
+						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+					}else {
+						Rent.findOne({'reservations._id': foundReservation._id}, function (error, rentFound) {
+							if (error) {
+								return apiResponse.ErrorResponse(res, err);
+							}else{
+								Lock.findById(rentFound.associatedLock, function (err, foundLock) {
+									if (foundLock === null) {
+										return apiResponse.notFoundResponse(res, "Lock not exists with this id");
+									} else {
+										const ref = foundLock.serial;
+										for (lock in locksID) {
+											if (locksID[lock] === ref) {
+												locks[lock].send(ref + ' open')
+												return apiResponse.successResponseWithData(res, "Door Unlocked !")
+											}
+										}
+										return apiResponse.ErrorResponse(res, "Can't unlock door")
+									}
+								})
+							}
+						})
+					}
+				}
+			});
+		} catch (err) {
+			//throw error in json response with status 500.
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
 
-		ws.onmessage = function(evt) {
-			if(evt.data === "door_unlocked") return apiResponse.successResponseWithData(res, "Door Unlocked !");
-			if(evt.data === "door_locked") return apiResponse.successResponseWithData(res, "Door Locked !");
-		};
-
-		ws.onclose = function(evt) {
-			console.log("WEBSOCKET STATUS: Disconnected");
-		};
+/**
+ * Close Lock.
+ *
+ * @param {string} reservation
+ *
+ * @returns {Object}
+ */
+exports.lockClose = [
+	auth,
+	check("reservation", "Reservation must not be empty.").isLength({ min: 1 }).trim(),
+	body("*").escape(),
+	function (req, res) {
+		if(!mongoose.Types.ObjectId.isValid(req.body.reservation)){
+			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
+		}
+		try {
+			Reservation.findById(req.body.reservation, function (err, foundReservation) {
+				if(foundReservation === null){
+					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
+				}else{
+					//Check authorized user
+					if(foundReservation.tenant.toString() !== req.user._id){
+						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+					}else {
+						Rent.findOne({'reservations._id': foundReservation._id}, function (error, rentFound) {
+							if (error) {
+								return apiResponse.ErrorResponse(res, err);
+							}else{
+								Lock.findById(rentFound.associatedLock, function (err, foundLock) {
+									if (foundLock === null) {
+										return apiResponse.notFoundResponse(res, "Lock not exists with this id");
+									} else {
+										const ref = foundLock.serial;
+										for (lock in locksID){
+											if(locksID[lock] === ref){
+												locks[lock].send(ref + ' close')
+												return apiResponse.successResponseWithData(res, "Door Locked !")
+											}
+										}
+										return apiResponse.ErrorResponse(res, "Can't lock door")
+									}
+								})
+							}
+						})
+					}
+				}
+			});
+		} catch (err) {
+			//throw error in json response with status 500.
+			return apiResponse.ErrorResponse(res, err);
+		}
 	}
 ];
