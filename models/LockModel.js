@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 
 const LockSchema = new mongoose.Schema({
 	name: {type: String, required: true},
-	address: {type: String, required: true},
-	auth: {type: String, required: true},
+	serial:{type: String, required: true},
 	owner: {type: Schema.ObjectId, ref: "User", required: true},
 }, {timestamps: true});
 
