@@ -39,7 +39,7 @@ exports.lockList = [
 					}
 				});
 		} catch (err) {
-			//throw error in json response with status 500. 
+			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -68,7 +68,7 @@ exports.lockDetail = [
 				}
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
+			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -108,7 +108,7 @@ exports.lockRegister = [
 				});
 			}
 		} catch (err) {
-			//throw error in json response with status 500. 
+			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -167,7 +167,7 @@ exports.lockUpdate = [
 				}
 			}
 		} catch (err) {
-			//throw error in json response with status 500. 
+			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -207,7 +207,7 @@ exports.lockDelete = [
 				}
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
+			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -235,12 +235,15 @@ exports.lockOpen = [
 	auth,
 	check("reservation", "Reservation must not be empty.").isLength({ min: 1 }).trim(),
 	body("*").escape(),
+
 	function (req, res) {
-		if(!mongoose.Types.ObjectId.isValid(req.body.reservation)){
+		const reservation = req.body.reservation;
+
+		if(!mongoose.Types.ObjectId.isValid(reservation)){
 			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 		}
 		try {
-			Reservation.findById(req.body.reservation, function (err, foundReservation) {
+			Reservation.findById(reservation, function (err, foundReservation) {
 				if(foundReservation === null){
 					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
 				}else{
@@ -257,12 +260,18 @@ exports.lockOpen = [
 										return apiResponse.notFoundResponse(res, "Lock not exists with this id");
 									} else {
 										const ref = foundLock.serial;
-										for (lock in locksID) {
-											if (locksID[lock] === ref) {
-												locks[lock].send(ref + ' open')
-												return apiResponse.successResponseWithData(res, "Door Unlocked !")
-											}
+
+										// const found = locks.some(el => el.ref === ref);
+
+										const lock = locks.find(lock => {
+											return lock.ref === ref;
+										})
+
+										if(lock) {
+											lock.ws.send(ref + ' open');
+											return apiResponse.successResponseWithData(res, "Door Unlocked !");
 										}
+
 										return apiResponse.ErrorResponse(res, "Can't unlock door")
 									}
 								})
@@ -290,11 +299,13 @@ exports.lockClose = [
 	check("reservation", "Reservation must not be empty.").isLength({ min: 1 }).trim(),
 	body("*").escape(),
 	function (req, res) {
-		if(!mongoose.Types.ObjectId.isValid(req.body.reservation)){
+		const reservation = req.body.reservation;
+
+		if(!mongoose.Types.ObjectId.isValid(reservation)){
 			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 		}
 		try {
-			Reservation.findById(req.body.reservation, function (err, foundReservation) {
+			Reservation.findById(reservation, function (err, foundReservation) {
 				if(foundReservation === null){
 					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
 				}else{
@@ -311,12 +322,16 @@ exports.lockClose = [
 										return apiResponse.notFoundResponse(res, "Lock not exists with this id");
 									} else {
 										const ref = foundLock.serial;
-										for (lock in locksID){
-											if(locksID[lock] === ref){
-												locks[lock].send(ref + ' close')
-												return apiResponse.successResponseWithData(res, "Door Locked !")
-											}
+
+										const lock = locks.find(lock => {
+											return lock.ref === ref;
+										})
+
+										if(lock) {
+											lock.ws.send(ref + ' close');
+											return apiResponse.successResponseWithData(res, "Door Unlocked !");
 										}
+
 										return apiResponse.ErrorResponse(res, "Can't lock door")
 									}
 								})
