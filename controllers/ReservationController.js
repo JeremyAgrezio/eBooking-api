@@ -6,6 +6,7 @@ const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const mongoose = require("mongoose");
 const mailer = require("../helpers/mailer");
+const emails = require("../helpers/emails");
 const { constants } = require("../helpers/constants");
 mongoose.set("useFindAndModify", false);
 
@@ -177,60 +178,7 @@ exports.reservationRegister = [
 									}
 
 									// Html email body
-									const html = `<div style="background-color: #49A69A">
-													  <img src="https://www.zupimages.net/up/20/33/hu8k.png" alt="logo"height="30" style="padding-top: 15px; padding-bottom: 10px; padding-left: 20px">
-													</div>
-													<div style="background-color: #2D404E; padding-top: 15px; padding-bottom: 25px">
-													 <table style="width:100%">
-													   <tr>
-														<th>
-														  <h1 style="color: #fff">Votre réservation est enregistré</h1>
-														  <p style="color: #fff">
-														  Votre réservation pour "${foundRent.title}" a bien été enregistré.
-														   <br> 
-														   Du ${req.body.start_at} au ${req.body.end_at},
-														   <br> 
-														   pour ${foundRent.price} € par nuit.
-														  </p>
-														  <a href="https://ebooking.glitch.me/rent" style="text-decoration: none">
-														  <button style=" border: none;
-																		  color: white;
-																		  padding: 10px 15px;
-																		  text-align: center;
-																		  text-decoration: none;
-																		  display: inline-block;
-																		  font-size: 16px;
-																		  margin: 4px 2px;
-																		  cursor: pointer;
-																		  background-color: #49A69A;
-																		  border-radius: 50px;">
-															Vos réservations
-														  </button>
-															</a>
-														</th>
-														<th>
-														  <img src="https://www.zupimages.net/up/20/33/pfyd.png" alt="logo" height="150px">
-														</th>
-													  </tr>
-													 </table>
-													</div>
-													<div style="background-color: #FFFFFF; padding-top: 15px; padding-bottom: 10px">
-													 <table style="width:100%">
-													   <tr>
-														<th>
-														  <img src="https://zupimages.net/up/20/33/asu3.jpg" alt="logo" height="200px">
-														</th>
-														 <th>
-														  <h2 style="color:#2D404E">
-															N'oubliez pas !
-															<br>
-															L'application est dispobible
-														  </h2>
-														   <img src="https://buddy.world/wp-content/uploads/2018/05/App-Store-Google-Play-Badges-Vector.jpg" alt="logo" height="50px">
-														</th>
-													  </tr>
-													 </table>
-													</div>`;
+									const html = emails.reservationRegister(foundRent.title, req.body.start_at, req.body.end_at, foundRent.price)
 
 									mailer.send(
 										constants.confirmEmails.from,
@@ -337,60 +285,7 @@ exports.reservationUpdate = [
 									if (err) { return apiResponse.ErrorResponse(res, err) }
 
 									// Html email body
-									const html = `<div style="background-color: #49A69A">
-													<img src="https://www.zupimages.net/up/20/33/hu8k.png" alt="logo"height="30" style="padding-top: 15px; padding-bottom: 10px; padding-left: 20px">
-												</div>
-												<div style="background-color: #2D404E; padding-top: 15px; padding-bottom: 25px">
-													<table style="width:100%">
-														<tr>
-															<th>
-																<h1 style="color: #fff">Votre réservation est enregistré</h1>
-																<p style="color: #fff">
-																	Votre réservation pour "${foundRent.title}" a été mise à jour.
-																	<br>
-																		Du ${req.body.start_at} au ${req.body.end_at},
-																		<br>
-																			pour ${foundRent.price} € par nuit.
-																</p>
-																<a href="https://ebooking.glitch.me/rent" style="text-decoration: none">
-																	<button style=" border: none;
-																					  color: white;
-																					  padding: 10px 15px;
-																					  text-align: center;
-																					  text-decoration: none;
-																					  display: inline-block;
-																					  font-size: 16px;
-																					  margin: 4px 2px;
-																					  cursor: pointer;
-																					  background-color: #49A69A;
-																					  border-radius: 50px;">
-																		Vos réservations
-																	</button>
-																</a>
-															</th>
-															<th>
-																<img src="https://www.zupimages.net/up/20/33/pfyd.png" alt="logo" height="150px">
-															</th>
-														</tr>
-													</table>
-												</div>
-												<div style="background-color: #FFFFFF; padding-top: 15px; padding-bottom: 10px">
-													<table style="width:100%">
-														<tr>
-															<th>
-																<img src="https://zupimages.net/up/20/33/asu3.jpg" alt="logo" height="200px">
-															</th>
-															<th>
-																<h2 style="color:#2D404E">
-																	N'oubliez pas !
-																	<br>
-																		L'application est dispobible
-																</h2>
-																<img src="https://buddy.world/wp-content/uploads/2018/05/App-Store-Google-Play-Badges-Vector.jpg" alt="logo" height="50px">
-															</th>
-														</tr>
-													</table>
-												</div>`;
+									const html = emails.reservationUpdate(foundRent.title, req.body.start_at, req.body.end_at, foundRent.price)
 
 									mailer.send( constants.confirmEmails.from, req.user.email, "eBooking - Mise à jour de votre Réservation", html )
 									.then(function () {
