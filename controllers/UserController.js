@@ -245,12 +245,59 @@ exports.userPasswordReset = [
 									return apiResponse.ErrorResponse(res, err);
 								} else {
 									// Html email body
-									let html = `<p>Password reset.</p><p>New password: ${otp}</p>`;
+									let html = `<div style="background-color: #49A69A">
+													<img src="https://www.zupimages.net/up/20/33/hu8k.png" alt="logo"height="30" style="padding-top: 15px; padding-bottom: 10px; padding-left: 20px">
+												</div>
+												<div style="background-color: #2D404E; padding-top: 15px; padding-bottom: 25px">
+													<table style="width:100%">
+														<tr>
+															<th>
+																<h1 style="color: #fff">Votre mot de passe provisoire</h1>
+																<p style="color: #fff">
+																	Saisissez le mot de passe provisoire ci-dessous.
+																	<br>
+																	Pour plus de sécurité, modifiez-le dans le rubrique <strong>Mon Compte</strong>.
+																</p>
+																<p style="  border: none;
+																			  color: #2D404E;
+																			  padding: 10px 15px;
+																			  text-align: center;
+																			  display: inline-block;
+																			  font-size: 16px;
+																			  margin: 4px 2px;
+																			  background-color: #fff;
+																			  border-radius: 25px;">
+																	${otp}
+																</p>
+															</th>
+															<th>
+																<img src="https://zupimages.net/up/20/33/xyuz.png" alt="logo" height="150px">
+															</th>
+														</tr>
+													</table>
+												</div>
+												<div style="background-color: #FFFFFF; padding-top: 15px; padding-bottom: 10px">
+													<table style="width:100%">
+														<tr>
+															<th>
+																<img src="https://zupimages.net/up/20/33/asu3.jpg" alt="logo" height="200px">
+															</th>
+															<th>
+																<h2 style="color:#2D404E">
+																	N'oubliez pas !
+																	<br>
+																		L'application est dispobible
+																</h2>
+																<img src="https://buddy.world/wp-content/uploads/2018/05/App-Store-Google-Play-Badges-Vector.jpg" alt="logo" height="50px">
+															</th>
+														</tr>
+													</table>
+												</div>`;
 									// Send confirmation email
 									mailer.send(
 										constants.confirmEmails.from,
 										req.body.email,
-										"Password Reset",
+										"eBooking - Réinitialisation de votre mot de passe",
 										html
 									).then(function(){
 										return apiResponse.successResponseWithData(res, "User Password Reset Success.");

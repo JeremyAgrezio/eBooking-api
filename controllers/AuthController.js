@@ -62,12 +62,57 @@ exports.register = [
 						}
 					);
 					// Html email body
-					let html = `<p>Please Confirm your Account.</p><p>OTP: ${otp}</p>`;
+					let html = `<div style="background-color: #49A69A">
+								  <img src="https://www.zupimages.net/up/20/33/hu8k.png" alt="logo"height="30" style="padding-top: 15px; padding-bottom: 10px; padding-left: 20px">
+								</div>
+								<div style="background-color: #2D404E; padding-top: 15px; padding-bottom: 25px">
+								 <table style="width:100%">
+								   <tr>
+									<th>
+									  <h1 style="color: #fff">Votre code de confirmation</h1>
+									  <p style="color: #fff">
+									  Saisissez le code de confirmation pour activer votre compte.
+									  </p>
+									  <p style="  border: none;
+												  color: #2D404E;
+												  padding: 10px 15px;
+												  text-align: center;
+												  display: inline-block;
+												  font-size: 16px;
+												  margin: 4px 2px;
+												  background-color: #fff;
+												  border-radius: 25px;">
+										${otp}
+									</p>
+									</th>
+									<th>
+									  <img src="https://zupimages.net/up/20/33/9esh.png" alt="logo" height="150px">
+									</th>
+								  </tr>
+								 </table>
+								</div>
+								<div style="background-color: #FFFFFF; padding-top: 15px; padding-bottom: 10px">
+								 <table style="width:100%">
+								   <tr>
+									<th>
+									  <img src="https://zupimages.net/up/20/33/asu3.jpg" alt="logo" height="200px">
+									</th>
+									 <th>
+									  <h2 style="color:#2D404E">
+										N'oubliez pas !
+										<br>
+										L'application est dispobible
+									  </h2>
+									   <img src="https://buddy.world/wp-content/uploads/2018/05/App-Store-Google-Play-Badges-Vector.jpg" alt="logo" height="50px">
+									</th>
+								  </tr>
+								 </table>
+								</div>`;
 					// Send confirmation email
 					mailer.send(
 						constants.confirmEmails.from,
 						req.body.email,
-						"Confirm Account",
+						"eBooking - Confirmez votre compte",
 						html
 					).then(function(){
 						// Save user.
@@ -233,12 +278,57 @@ exports.resendConfirmOtp = [
 							// Generate otp
 							const otp = utility.randomNumber(4);
 							// Html email body
-							const html = "<p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
+							const html = `<div style="background-color: #49A69A">
+												<img src="https://www.zupimages.net/up/20/33/hu8k.png" alt="logo"height="30" style="padding-top: 15px; padding-bottom: 10px; padding-left: 20px">
+											</div>
+											<div style="background-color: #2D404E; padding-top: 15px; padding-bottom: 25px">
+												<table style="width:100%">
+													<tr>
+														<th>
+															<h1 style="color: #fff">Votre code de confirmation</h1>
+															<p style="color: #fff">
+																Saisissez le code de confirmation pour activer votre compte.
+															</p>
+															<p style="  border: none;
+																  color: #2D404E;
+																  padding: 10px 15px;
+																  text-align: center;
+																  display: inline-block;
+																  font-size: 16px;
+																  margin: 4px 2px;
+																  background-color: #fff;
+																  border-radius: 25px;">
+																`+otp+`
+															</p>
+														</th>
+														<th>
+															<img src="https://zupimages.net/up/20/33/9esh.png" alt="logo" height="150px">
+														</th>
+													</tr>
+												</table>
+											</div>
+											<div style="background-color: #FFFFFF; padding-top: 15px; padding-bottom: 10px">
+												<table style="width:100%">
+													<tr>
+														<th>
+															<img src="https://zupimages.net/up/20/33/asu3.jpg" alt="logo" height="200px">
+														</th>
+														<th>
+															<h2 style="color:#2D404E">
+																N'oubliez pas !
+																<br>
+																	L'application est dispobible
+															</h2>
+															<img src="https://buddy.world/wp-content/uploads/2018/05/App-Store-Google-Play-Badges-Vector.jpg" alt="logo" height="50px">
+														</th>
+													</tr>
+												</table>
+											</div>`;
 							// Send confirmation email
 							mailer.send(
-								constants.confirmEmails.from, 
+								constants.confirmEmails.from,
 								req.body.email,
-								"Confirm Account",
+								"eBooking - Confirmez votre compte",
 								html
 							).then(function(){
 								user.isConfirmed = 0;
