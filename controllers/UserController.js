@@ -6,6 +6,7 @@ const utility = require("../helpers/utility");
 const auth = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
 const mailer = require("../helpers/mailer");
+const emails = require("../helpers/emails");
 const { constants } = require("../helpers/constants");
 
 // user Schema
@@ -221,7 +222,7 @@ exports.userPasswordReset = [
 			} else {
 				User.findOne({email: req.body.email}).then(user => {
 					if (user) {
-						let otp = utility.randomNumber(6).toString();
+						const otp = utility.randomNumber(6).toString();
 						bcrypt.hash(otp,10,function(err, hash) {
 							let userModel = new User(
 								{
@@ -245,12 +246,12 @@ exports.userPasswordReset = [
 									return apiResponse.ErrorResponse(res, err);
 								} else {
 									// Html email body
-									let html = `<p>Password reset.</p><p>New password: ${otp}</p>`;
+									const html = emails.passwordReset(otp)
 									// Send confirmation email
 									mailer.send(
 										constants.confirmEmails.from,
 										req.body.email,
-										"Password Reset",
+										"eBooking - Réinitialisation de votre mot de passe",
 										html
 									).then(function(){
 										return apiResponse.successResponseWithData(res, "User Password Reset Success.");

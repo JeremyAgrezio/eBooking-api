@@ -6,6 +6,7 @@ const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const mongoose = require("mongoose");
 const mailer = require("../helpers/mailer");
+const emails = require("../helpers/emails");
 const { constants } = require("../helpers/constants");
 mongoose.set("useFindAndModify", false);
 
@@ -177,14 +178,12 @@ exports.reservationRegister = [
 									}
 
 									// Html email body
-									const html =
-										`<p>Your reservation for ${foundRent.title} at ${req.body.start_at} 						
-											to ${req.body.end_at} for ${foundRent.price} € is confirmed</p>`;
+									const html = emails.reservationRegister(foundRent.title, req.body.start_at, req.body.end_at, foundRent.price)
 
 									mailer.send(
 										constants.confirmEmails.from,
 										req.user.email,
-										"Reservation confirmation",
+										"eBooking - Votre Réservation",
 										html
 									).then(function () {
 										return apiResponse.successResponseWithData(res, "Reservation register Success.", reservationData);
@@ -286,11 +285,9 @@ exports.reservationUpdate = [
 									if (err) { return apiResponse.ErrorResponse(res, err) }
 
 									// Html email body
-									const html =
-										`<p>Your reservation for ${foundRent.title} at ${req.body.start_at} 						
-										to ${req.body.end_at} for ${foundRent.price} € has been updated</p>`;
+									const html = emails.reservationUpdate(foundRent.title, req.body.start_at, req.body.end_at, foundRent.price)
 
-									mailer.send( constants.confirmEmails.from, req.user.email, "Reservation updated", html )
+									mailer.send( constants.confirmEmails.from, req.user.email, "eBooking - Mise à jour de votre Réservation", html )
 									.then(function () {
 										const reservationData = new ReservationData(reservation);
 										return apiResponse.successResponseWithData(res, "Reservation update Success.", reservationData);
@@ -303,7 +300,7 @@ exports.reservationUpdate = [
 				});
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
+			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -311,9 +308,9 @@ exports.reservationUpdate = [
 
 /**
  * Reservation Delete.
- * 
+ *
  * @param {string} id
- * 
+ *
  * @returns {Object}
  */
 exports.reservationDelete = [
@@ -355,7 +352,7 @@ exports.reservationDelete = [
 				}
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
+			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}

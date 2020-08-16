@@ -6,6 +6,7 @@ const utility = require("../helpers/utility");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
+const emails = require("../helpers/emails");
 const { constants } = require("../helpers/constants");
 
 /**
@@ -62,12 +63,12 @@ exports.register = [
 						}
 					);
 					// Html email body
-					let html = `<p>Please Confirm your Account.</p><p>OTP: ${otp}</p>`;
+					let html = emails.otpSend(otp);
 					// Send confirmation email
 					mailer.send(
 						constants.confirmEmails.from,
 						req.body.email,
-						"Confirm Account",
+						"eBooking - Confirmez votre compte",
 						html
 					).then(function(){
 						// Save user.
@@ -233,12 +234,12 @@ exports.resendConfirmOtp = [
 							// Generate otp
 							const otp = utility.randomNumber(4);
 							// Html email body
-							const html = "<p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
+							const html = emails.otpSend(otp);
 							// Send confirmation email
 							mailer.send(
-								constants.confirmEmails.from, 
+								constants.confirmEmails.from,
 								req.body.email,
-								"Confirm Account",
+								"eBooking - Confirmez votre compte",
 								html
 							).then(function(){
 								user.isConfirmed = 0;
