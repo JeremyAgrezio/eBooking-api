@@ -165,6 +165,9 @@ exports.reservationRegister = [
 					if (reservation_start < publication_start || reservation_end > publication_end){
 						return apiResponse.unauthorizedResponse(res, "Reserved date(s) outside publication range");
 					}
+					else if (reservation_start >= reservation_end){
+						return apiResponse.unauthorizedResponse(res, "End date must be superior to start date");
+					}
 
 					const totalDays = (reservation_end.getTime() - reservation_start.getTime()) / (1000 * 3600 * 24);
 
@@ -282,6 +285,9 @@ exports.reservationUpdate = [
 					}
 				    else if(reservation_start < publication_start || reservation_end > publication_end) {
 						return apiResponse.unauthorizedResponse(res, "Reserved date(s) outside publication range");
+					}
+					else if (reservation_start >= reservation_end){
+						return apiResponse.unauthorizedResponse(res, "End date must be superior to start date");
 					}
 
 					const totalDays = (reservation_end.getTime() - reservation_start.getTime()) / (1000 * 3600 * 24);
