@@ -2,15 +2,9 @@ const Lock = require("../models/LockModel");
 const Reservation = require("../models/ReservationModel");
 const Rent = require("../models/RentModel");
 const { body, check, validationResult } = require("express-validator");
-//helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-// const utility = require("../helpers/utility");
 const auth = require("../middlewares/jwt");
-// const bcrypt = require("bcrypt");
-// const mailer = require("../helpers/mailer");
-// const { constants } = require("../helpers/constants");
 const mongoose = require("mongoose");
-const WebSocket = require('ws');
 
 // lock Schema
 function LockData(data) {
@@ -143,28 +137,24 @@ exports.lockUpdate = [
 			else {
 				if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
-				}else{
-					Lock.findById(req.params.id, function (err, foundLock) {
-						if(foundLock === null){
-							return apiResponse.notFoundResponse(res,"Lock not exists with this id");
-						}else{
-							//Check authorized user
-							if(foundLock.owner.toString() !== req.user._id){
-								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-							}else{
-								//update lock.
-								Lock.findByIdAndUpdate(req.params.id, lock, {},function (err) {
-									if (err) {
-										return apiResponse.ErrorResponse(res, err);
-									}else{
-										let lockData = new LockData(lock);
-										return apiResponse.successResponseWithData(res,"Lock update Success.", lockData);
-									}
-								});
-							}
-						}
-					});
 				}
+				Lock.findById(req.params.id, function (err, foundLock) {
+					if(foundLock === null){
+						return apiResponse.notFoundResponse(res,"Lock not exists with this id");
+					}else if(foundLock.owner.toString() !== req.user._id){ //Check authorized user
+						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+					}else{
+						//update lock.
+						Lock.findByIdAndUpdate(req.params.id, lock, {},function (err) {
+							if (err) {
+								return apiResponse.ErrorResponse(res, err);
+							}else{
+								let lockData = new LockData(lock);
+								return apiResponse.successResponseWithData(res,"Lock update Success.", lockData);
+							}
+						});
+					}
+				});
 			}
 		} catch (err) {
 			//throw error in json response with status 500.
@@ -190,20 +180,14 @@ exports.lockDelete = [
 			Lock.findById(req.params.id, function (err, foundLock) {
 				if(foundLock === null){
 					return apiResponse.notFoundResponse(res,"Lock not exists with this id");
+				}else if(foundLock.owner.toString() !== req.user._id){ //Check authorized user
+					return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 				}else{
-					//Check authorized user
-					if(foundLock.owner.toString() !== req.user._id){
-						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-					}else{
-						//delete lock.
-						Lock.findByIdAndRemove(req.params.id,function (err) {
-							if (err) {
-								return apiResponse.ErrorResponse(res, err);
-							}else{
-								return apiResponse.successResponse(res,"Lock delete Success.");
-							}
-						});
-					}
+					Lock.findByIdAndRemove(req.params.id,function (err) { //delete lock.
+						if (err) return apiResponse.ErrorResponse(res, err);
+
+						return apiResponse.successResponse(res,"Lock delete Success.");
+					});
 				}
 			});
 		} catch (err) {
@@ -212,17 +196,6 @@ exports.lockDelete = [
 		}
 	}
 ];
-
-function CloseDoor(ref){
-	for (lock in locksID){
-		if(locksID[lock] === ref){
-			locks[lock].send(ref + ' close')
-		}
-	}
-}
-
-
-// TODO Add date verification
 
 /**
  * Open Lock.
@@ -246,38 +219,35 @@ exports.lockOpen = [
 			Reservation.findById(reservation, function (err, foundReservation) {
 				if(foundReservation === null){
 					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
-				}else{
-					//Check authorized user
-					if(foundReservation.tenant.toString() !== req.user._id){
+				}else if (foundReservation.tenant.toString() !== req.user._id){ //Check authorized user
+					return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+				}else {
+					const today = new Date();
+					const start = new Date(foundReservation.start_at);
+					const end = new Date(foundReservation.end_at);
+
+					if( today < start || today > end ) {
 						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-					}else {
-						Rent.findOne({'reservations._id': foundReservation._id}, function (error, rentFound) {
-							if (error) {
-								return apiResponse.ErrorResponse(res, err);
-							}else{
-								Lock.findById(rentFound.associatedLock, function (err, foundLock) {
-									if (foundLock === null) {
-										return apiResponse.notFoundResponse(res, "Lock not exists with this id");
-									} else {
-										const ref = foundLock.serial;
+					}
+					Rent.findOne({'reservations._id': foundReservation._id}, function (err, rentFound) {
+						if (err) return apiResponse.ErrorResponse(res, err);
 
-										// const found = locks.some(el => el.ref === ref);
+						Lock.findById(rentFound.associatedLock, function (err, foundLock) {
+							if (foundLock === null) {
+								return apiResponse.notFoundResponse(res, "Lock not exists with this id");
+							} else {
+								const ref = foundLock.serial;
+								const lock = locks.find(lock => { return lock.ref === ref })
 
-										const lock = locks.find(lock => {
-											return lock.ref === ref;
-										})
+								if(lock) {
+									lock.ws.send(ref + ' open');
+									return apiResponse.successResponseWithData(res, "Door Unlocked !");
+								}
 
-										if(lock) {
-											lock.ws.send(ref + ' open');
-											return apiResponse.successResponseWithData(res, "Door Unlocked !");
-										}
-
-										return apiResponse.ErrorResponse(res, "Can't unlock door")
-									}
-								})
+								return apiResponse.ErrorResponse(res, err)
 							}
 						})
-					}
+					})
 				}
 			});
 		} catch (err) {
@@ -308,36 +278,35 @@ exports.lockClose = [
 			Reservation.findById(reservation, function (err, foundReservation) {
 				if(foundReservation === null){
 					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
-				}else{
-					//Check authorized user
-					if(foundReservation.tenant.toString() !== req.user._id){
+				}else if (foundReservation.tenant.toString() !== req.user._id){ //Check authorized user
+					return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+				}else {
+					const today = new Date();
+					const start = new Date(foundReservation.start_at);
+					const end = new Date(foundReservation.end_at);
+
+					if( today < start || today > end ) {
 						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-					}else {
-						Rent.findOne({'reservations._id': foundReservation._id}, function (error, rentFound) {
-							if (error) {
-								return apiResponse.ErrorResponse(res, err);
-							}else{
-								Lock.findById(rentFound.associatedLock, function (err, foundLock) {
-									if (foundLock === null) {
-										return apiResponse.notFoundResponse(res, "Lock not exists with this id");
-									} else {
-										const ref = foundLock.serial;
+					}
+					Rent.findOne({'reservations._id': foundReservation._id}, function (err, rentFound) {
+						if (err) return apiResponse.ErrorResponse(res, err);
 
-										const lock = locks.find(lock => {
-											return lock.ref === ref;
-										})
+						Lock.findById(rentFound.associatedLock, function (err, foundLock) {
+							if (foundLock === null) {
+								return apiResponse.notFoundResponse(res, "Lock not exists with this id");
+							} else {
+								const ref = foundLock.serial;
+								const lock = locks.find(lock => { return lock.ref === ref })
 
-										if(lock) {
-											lock.ws.send(ref + ' close');
-											return apiResponse.successResponseWithData(res, "Door Unlocked !");
-										}
+								if(lock) {
+									lock.ws.send(ref + ' close');
+									return apiResponse.successResponseWithData(res, "Door Unlocked !");
+								}
 
-										return apiResponse.ErrorResponse(res, "Can't lock door")
-									}
-								})
+								return apiResponse.ErrorResponse(res, "Can't lock door")
 							}
 						})
-					}
+					})
 				}
 			});
 		} catch (err) {
