@@ -94,11 +94,21 @@ exports.lockRegister = [
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
 			}
 			else {
-				//Save lock.
-				lock.save(function (err) {
-					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let lockData = new LockData(lock);
-					return apiResponse.successResponseWithData(res,"Lock register Success.", lockData);
+				Lock.findOne({ serial: req.body.serial }, function (err, foundLock) {
+					if (err) {
+						return apiResponse.ErrorResponse(res, err);
+					} else if (foundLock) {
+						return apiResponse.unauthorizedResponse(res, "Lock already registered.");
+					}
+
+					//Save lock.
+					lock.save(function (err) {
+						if (err) {
+							return apiResponse.ErrorResponse(res, err);
+						}
+						let lockData = new LockData(lock);
+						return apiResponse.successResponseWithData(res, "Lock register Success.", lockData);
+					});
 				});
 			}
 		} catch (err) {
