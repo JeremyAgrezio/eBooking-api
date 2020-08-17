@@ -71,19 +71,18 @@ exports.reservationDetail = [
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Reservation.findOne({_id: req.params.id,tenant: req.user._id}, {})
+			Reservation.findOne({_id: req.params.id,tenant: req.user._id})
 			.populate({
 				path: 'publication',
 				populate: {
 					path: 'rent',
-					select: 'pictures',
+					select: {'pictures': 1, '_id': 0},
 				},
 				select: {'_id': 1, 'start_at': 1, 'end_at': 1}
 			})
 			.then((reservation)=>{
 				if(reservation !== null){
-					let reservationData = new ReservationData(reservation);
-					return apiResponse.successResponseWithData(res, "Operation success", reservationData);
+					return apiResponse.successResponseWithData(res, "Operation success", reservation);
 				}else{
 					return apiResponse.successResponseWithData(res, "Operation success", {});
 				}
