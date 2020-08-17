@@ -58,6 +58,45 @@ exports.reservationList = [
 ];
 
 /**
+ * Today Reservation List.
+ *
+ * @returns {Object}
+ */
+exports.reservationListToday = [
+	auth,
+	function (req, res) {
+		try {
+			Reservation.find(
+				{
+					tenant: req.user._id,
+					start_at: {$lte: new Date()},
+					end_at: {$gte: new Date()},
+				},
+				{'createdAt': 0}
+			)
+				.populate({
+					path: 'publication',
+					populate: {
+						path: 'rent',
+						select: {'pictures': 1, '_id': 0},
+					},
+					select: '_id'
+				})
+				.then((reservations)=>{
+					if(reservations.length > 0){
+						return apiResponse.successResponseWithData(res, "Operation success", reservations);
+					}else{
+						return apiResponse.successResponseWithData(res, "Operation success", []);
+					}
+				});
+		} catch (err) {
+			//throw error in json response with status 500.
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
  * Reservation Detail.
  *
  * @param {string} id

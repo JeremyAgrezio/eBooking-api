@@ -1000,6 +1000,32 @@
 					"response": []
 				},
 				{
+					"name": "Reservation List Today",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/reservation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reservation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Reservation Detail",
 					"request": {
 						"method": "GET",
@@ -1308,7 +1334,7 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3MzIwMywiZXhwIjoxNTk2NTU5NjAzfQ.ivKPCXD9dO1gnd9n7MW67gCN_j7V8Aaexm-pQVJzHOw"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NzU4MjA5MSwiZXhwIjoxNTk3NjY4NDkxfQ.46ivlLzCFmtQWsWw_tloiLeiBydqlF2cgBMADobx0XU"
 							}
 						],
 						"body": {
@@ -1316,7 +1342,7 @@
 							"urlencoded": [
 								{
 									"key": "reservation",
-									"value": "5f284cc5eebda41f1bf0e308",
+									"value": "5f392a842da05618b23bbfb8",
 									"type": "text"
 								}
 							]

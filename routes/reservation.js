@@ -4,6 +4,7 @@ const ReservationController = require("../controllers/ReservationController");
 const router = express.Router();
 
 router.get("/", ReservationController.reservationList);
+router.get("/today", ReservationController.reservationListToday);
 router.get("/:id", ReservationController.reservationDetail);
 router.post("/", ReservationController.reservationRegister);
 router.put("/:id", ReservationController.reservationUpdate);
