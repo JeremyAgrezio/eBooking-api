@@ -28,6 +28,7 @@
     "morgan": "~1.9.0",
     "multer": "latest",
     "nodemailer": "^6.4.11",
+    "stripe": "^8.86.0",
     "ws": "^7.3.1"
   },
   "devDependencies": {

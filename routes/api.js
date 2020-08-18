@@ -8,6 +8,7 @@ const reservationRouter = require("./reservation");
 const lockRouter = require("./lock");
 const adminRouter = require("./admin");
 const uploadRouter = require("./upload");
+const stripeRouter = require("./stripe");
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use("/reservation/", reservationRouter);
 app.use("/lock/", lockRouter);
 app.use("/admin/", adminRouter);
 app.use("/upload/", uploadRouter);
+app.use("/stripe/", stripeRouter);
 
 module.exports = app;
