@@ -11,6 +11,18 @@
 			"item": [
 				{
 					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b018ab5b-fe08-4a37-87be-826e248c6a56",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -94,6 +106,29 @@
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "04111774-5e73-470b-a81c-f82f6816318e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "3d817927-31bd-4130-8390-b2566003d048",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -225,14 +260,18 @@
 				{
 					"name": "User Profile",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NDI4MDc3NiwiZXhwIjoxNTg0MzY3MTc2fQ.cATDsFmovLZ7-rRIYptX5rEXA3FCE8K3l2Vqrukyn44"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/user",
 							"protocol": "http",
@@ -251,16 +290,21 @@
 				{
 					"name": "User Update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTQ4MzIzMCwiZXhwIjoxNTg1NTY5NjMwfQ.9PmQQJKTQeKQqhfQRQDd0dlE4gCHQ14yktFxnzuiD0I",
 								"type": "text"
 							}
 						],
@@ -333,17 +377,22 @@
 				{
 					"name": "User Password Update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTY0MDg3MCwiZXhwIjoxNTg1NzI3MjcwfQ.w3vmil8SGsKxoK5DYoqA9xBHwMTdWoyaGkYnNDXTGuE"
 							}
 						],
 						"body": {
@@ -380,18 +429,22 @@
 				{
 					"name": "User Password Reset",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NDI4MDc3NiwiZXhwIjoxNTg0MzY3MTc2fQ.cATDsFmovLZ7-rRIYptX5rEXA3FCE8K3l2Vqrukyn44",
-								"disabled": true
 							}
 						],
 						"body": {
@@ -429,6 +482,16 @@
 				{
 					"name": "Rent Register",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -436,11 +499,6 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM"
 							}
 						],
 						"body": {
@@ -522,14 +580,18 @@
 				{
 					"name": "Rent List",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/rent",
 							"protocol": "http",
@@ -548,14 +610,18 @@
 				{
 					"name": "Rent Detail",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/rent/5e89dc2b1bc06d0adfafd52f",
 							"protocol": "http",
@@ -575,17 +641,22 @@
 				{
 					"name": "Rent Update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM",
 								"type": "text"
 							}
 						],
@@ -668,14 +739,18 @@
 				{
 					"name": "Rent Delete",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1NjY1NSwiZXhwIjoxNTgyNTQzMDU1fQ.3GRv7lGKwCMQV6ma2sHs4rsu2kgLQGsE3QXI2c42CEs",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/rent/5e519b7936ccec3715e099b7",
 							"protocol": "http",
@@ -701,6 +776,16 @@
 				{
 					"name": "Publication Register",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -708,11 +793,6 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM"
 							}
 						],
 						"body": {
@@ -753,14 +833,18 @@
 				{
 					"name": "Publication List",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/publication",
 							"protocol": "http",
@@ -779,14 +863,18 @@
 				{
 					"name": "Publication Search",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/publication?city=Bordeaux",
 							"protocol": "http",
@@ -811,14 +899,18 @@
 				{
 					"name": "Publication Detail",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/publication/5e64aeed8e897c5b7d915717",
 							"protocol": "http",
@@ -838,17 +930,22 @@
 				{
 					"name": "Publication Update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM",
 								"type": "text"
 							}
 						],
@@ -891,14 +988,18 @@
 				{
 					"name": "Publication Delete",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/publication/5e55172e1099044677a6a75c",
 							"protocol": "http",
@@ -924,6 +1025,16 @@
 				{
 					"name": "Reservation Register",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -931,11 +1042,6 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo"
 							}
 						],
 						"body": {
@@ -976,14 +1082,18 @@
 				{
 					"name": "Reservation List",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/reservation",
 							"protocol": "http",
@@ -1002,14 +1112,18 @@
 				{
 					"name": "Reservation List Today",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3NTU3MiwiZXhwIjoxNTk2NTYxOTcyfQ.5JgzX7SZ51JQi2Z-KxuQOHmnw-m49zkDjUoD6J8xmQo",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/reservation",
 							"protocol": "http",
@@ -1028,14 +1142,18 @@
 				{
 					"name": "Reservation Detail",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/reservation/5e825a6b384def711825ba9c",
 							"protocol": "http",
@@ -1055,17 +1173,22 @@
 				{
 					"name": "Reservation Update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NTA3ODc0NywiZXhwIjoxNTk1MTY1MTQ3fQ.chFo1kkChJHSGZ1pV2dqvQtC8S_Y-AzAjNX20F93ZiM",
 								"type": "text"
 							}
 						],
@@ -1108,14 +1231,18 @@
 				{
 					"name": "Reservation Delete",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTU1OTU3NCwiZXhwIjoxNTg1NjQ1OTc0fQ.I1zFiNLmNAIIrnZqhsfB5F5jG-J3TBgFwXiVAElizFQ",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/reservation/5e556c8e616d0b4f9fc67566",
 							"protocol": "http",
@@ -1141,6 +1268,16 @@
 				{
 					"name": "Lock Register",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -1148,11 +1285,6 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTkwNTkxMiwiZXhwIjoxNTg1OTkyMzEyfQ.LwY-Ftj0opLgBoekChMbo1Hkh03PuTpQbqdrb7ZF8xw"
 							}
 						],
 						"body": {
@@ -1195,14 +1327,18 @@
 				{
 					"name": "Lock List",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/lock",
 							"protocol": "http",
@@ -1221,14 +1357,18 @@
 				{
 					"name": "Lock Detail",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NTkwNTkxMiwiZXhwIjoxNTg1OTkyMzEyfQ.LwY-Ftj0opLgBoekChMbo1Hkh03PuTpQbqdrb7ZF8xw",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/lock/5e87054dab35a31f58501fa5",
 							"protocol": "http",
@@ -1248,17 +1388,22 @@
 				{
 					"name": "Lock Update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1NjY1NSwiZXhwIjoxNTgyNTQzMDU1fQ.3GRv7lGKwCMQV6ma2sHs4rsu2kgLQGsE3QXI2c42CEs",
 								"type": "text"
 							}
 						],
@@ -1297,14 +1442,18 @@
 				{
 					"name": "Lock Delete",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1NjY1NSwiZXhwIjoxNTgyNTQzMDU1fQ.3GRv7lGKwCMQV6ma2sHs4rsu2kgLQGsE3QXI2c42CEs",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/lock/5e519b7936ccec3715e099b7",
 							"protocol": "http",
@@ -1324,17 +1473,22 @@
 				{
 					"name": "Lock Open",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NzU4MjA5MSwiZXhwIjoxNTk3NjY4NDkxfQ.46ivlLzCFmtQWsWw_tloiLeiBydqlF2cgBMADobx0XU"
 							}
 						],
 						"body": {
@@ -1366,17 +1520,22 @@
 				{
 					"name": "Lock Close",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU5NjQ3MzIwMywiZXhwIjoxNTk2NTU5NjAzfQ.ivKPCXD9dO1gnd9n7MW67gCN_j7V8Aaexm-pQVJzHOw"
 							}
 						],
 						"body": {
@@ -1414,14 +1573,18 @@
 				{
 					"name": "Users List",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/admin/users",
 							"protocol": "http",
@@ -1441,14 +1604,18 @@
 				{
 					"name": "Users Registered List (7 days)",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/admin/lastWeekUsers",
 							"protocol": "http",
@@ -1468,6 +1635,16 @@
 				{
 					"name": "User Edit",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -1475,11 +1652,6 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM"
 							}
 						],
 						"body": {
@@ -1562,17 +1734,22 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4NjA5MzA0NiwiZXhwIjoxNTg2MTc5NDQ2fQ.JyNpdr4DdQDFbicxUuvtEJxBjZTSH5D5CIjFsl7kJzM",
 								"type": "text"
 							}
 						],
@@ -1599,14 +1776,18 @@
 				{
 					"name": "Reservations List (7 days)",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTUxOWE5NzM2Y2NlYzM3MTVlMDk5YjYiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsImlhdCI6MTU4MjQ1NjY1NSwiZXhwIjoxNTgyNTQzMDU1fQ.3GRv7lGKwCMQV6ma2sHs4rsu2kgLQGsE3QXI2c42CEs",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/admin/lastWeekReservations",
 							"protocol": "http",
@@ -1629,6 +1810,16 @@
 		{
 			"name": "Upload files",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -1636,11 +1827,6 @@
 						"name": "Content-Type",
 						"type": "text",
 						"value": "multipart/form-data"
-					},
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTc3YmVkYTdhYjJiYjRmMjdjMTQxN2UiLCJmaXJzdE5hbWUiOiJHb3Jkb24iLCJsYXN0TmFtZSI6IkZyZWVtYW4iLCJlbWFpbCI6ImplcmVteS5hZ3JlemlvQG9yYW5nZS5mciIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU4Njc5NDE3MywiZXhwIjoxNTg2ODgwNTczfQ.zgDzkpQFQcl_XCGCb0xqA5o9nYJR1cPrti2BKyxKEj8"
 					}
 				],
 				"body": {
@@ -1668,6 +1854,35 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f6479884-f89e-498b-bdbe-5ee8298409ea",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "34a827db-cdbc-47c6-a6dc-8cada823a6da",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "1722b82e-7238-40ca-b381-91c667594997",
+			"key": "token",
+			"value": ""
 		}
 	],
 	"protocolProfileBehavior": {}
