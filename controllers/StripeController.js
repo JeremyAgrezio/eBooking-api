@@ -56,7 +56,7 @@ async function paymentStatus (paymentIntentId) {
  */
 exports.createPaymentIntent = [
     auth,
-    check("idPublication", "Rent must not be empty.").isLength({ min: 1 }),
+    check("idPublication", "Publication ID must not be empty.").isLength({ min: 1 }),
     check("startAt", "Start date must not be empty.").isLength({ min: 1 }).isISO8601().toDate(),
     check("finishAt", "End date must not be empty.").isLength({ min: 1 }).isISO8601().toDate(),
     body("*").escape(),
@@ -92,21 +92,47 @@ exports.createPaymentIntent = [
  */
 exports.checkPaymentStatus = [
     auth,
-    check("paymentIntent", "Rent must not be empty.").isLength({ min: 1 }),
+    check("paymentIntent", "Payment intent  must not be empty.").isLength({ min: 1 }),
     body("*").escape(),
 
     function (req, res) {
         const paymentIntentId = req.body.paymentIntent;
 
         paymentStatus(paymentIntentId)
-        .then( (status) => {
-            if (status) {
-                return apiResponse.successResponseWithData(res, "Réservation effectuée", {});
-            }
-            return apiResponse.validationErrorWithData(res, "Paiement refusé", {});
-        })
-        .catch( raison => {
-            console.error( 'fonction siRompue appelée : ' + raison );
-        })
+            .then( (isAccepted) => {
+                if (isAccepted) {
+                    return apiResponse.successResponseWithData(res, "Reservation success", {});
+                }
+
+                return apiResponse.validationErrorWithData(res, "Payment error", {});
+            })
+            .catch( err => {
+                console.error( 'fonction siRompue appelée : ' + err );
+            })
     }
 ];
+
+/**
+ * Cancel Payment Intent.
+ *
+ * @param {string} paymentIntent
+ *
+ * @returns {String}
+ */
+exports.cancelPaymentIntent = [
+    auth,
+    check("paymentIntent", "Payment intent must not be empty.").isLength({ min: 1 }),
+    body("*").escape(),
+
+    async function (req, res) {
+        const paymentIntentId = req.body.paymentIntent;
+        const paymentIntent = await stripe.paymentIntents.cancel(paymentIntentId);
+
+        if (paymentIntent.status === "canceled") {
+            return apiResponse.successResponseWithData(res, "Payment's intent cancel success", {});
+        }
+
+        return apiResponse.validationErrorWithData(res, "Payment's intent error", {});
+    }
+];
+
