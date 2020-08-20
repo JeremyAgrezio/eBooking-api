@@ -5,45 +5,7 @@ const apiResponse = require("../helpers/apiResponse");
 const mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
 
-// This is a sample test API key. Sign in to see examples pre-filled with your key.
 const stripe = require("stripe")(process.env.SECRET_KEY_STRIPE);
-
-function findPublication(res, items, callback) {
-    try {
-        Publication.findById(items.idPublication)
-            .populate('rent', {'_id': 0, 'price': 1})
-            .then((publication)=>{
-                if(publication !== null){
-                    callback(publication);
-                }
-            });
-    } catch (err) {
-        //throw error in json response with status 500.
-        return apiResponse.ErrorResponse(res, err);
-    }
-}
-
-function calculateOrderAmount (res, items, callback) {
-    // Replace this constant with a calculation of the order's amount
-    // Calculate the order total on the server to prevent
-    // people from directly manipulating the amount on the client
-
-    findPublication(res, items, function(publication) {
-
-        const reservation_start = new Date(items.startAt)
-        const reservation_end = new Date(items.finishAt)
-
-        const days = Math.round((reservation_end - reservation_start) / (1000 * 60 * 60 * 24));
-        const price = (publication.rent.price * days) * 100;
-
-        callback(price);
-    });
-};
-
-async function paymentStatus (paymentIntentId) {
-    const paymentIntent = stripe.paymentIntents.retrieve( paymentIntentId );
-    return await paymentIntent.amount === paymentIntent.amount_received;
-};
 
 /**
  * Create Payment Intent.
@@ -135,4 +97,39 @@ exports.cancelPaymentIntent = [
         return apiResponse.validationErrorWithData(res, "Payment's intent error", {});
     }
 ];
+
+
+function findPublication(res, items, callback) {
+    try {
+        Publication.findById(items.idPublication)
+            .populate('rent', 'price')
+            .then((publication)=>{
+                if(publication !== null){
+                    callback(publication);
+                }
+            });
+    } catch (err) {
+        //throw error in json response with status 500.
+        return apiResponse.ErrorResponse(res, err);
+    }
+}
+
+function calculateOrderAmount (res, items, callback) {
+
+    findPublication(res, items, function(publication) {
+
+        const reservation_start = new Date(items.startAt)
+        const reservation_end = new Date(items.finishAt)
+
+        const days = Math.round((reservation_end - reservation_start) / (1000 * 60 * 60 * 24));
+        const price = (publication.rent.price * days) * 100;
+
+        callback(price);
+    });
+};
+
+async function paymentStatus (paymentIntentId) {
+    const paymentIntent = stripe.paymentIntents.retrieve( paymentIntentId );
+    return await paymentIntent.amount === paymentIntent.amount_received;
+};
 
