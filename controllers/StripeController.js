@@ -68,10 +68,10 @@ exports.createPaymentIntent = [
             return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid publication ID");
         }
 
-        calculateOrderAmount(res, items, function(price) {
+        calculateOrderAmount(res, items, async function(price) {
 
             // Create a PaymentIntent with the order amount and currency
-            const paymentIntent = stripe.paymentIntents.create({
+            const paymentIntent = await stripe.paymentIntents.create({
                 amount: price,
                 currency: "eur"
             });
@@ -86,18 +86,17 @@ exports.createPaymentIntent = [
 /**
  * Check Payment Status.
  *
- * @param {string} clientSecret
+ * @param {string} paymentIntent
  *
  * @returns {String}
  */
 exports.checkPaymentStatus = [
     auth,
-    check("clientSecret", "Rent must not be empty.").isLength({ min: 1 }),
+    check("paymentIntent", "Rent must not be empty.").isLength({ min: 1 }),
     body("*").escape(),
 
     function (req, res) {
-        const clientSecret  = req.body.clientSecret;
-        const paymentIntentId = clientSecret.substring(clientSecret.indexOf("_"));
+        const paymentIntentId = req.body.paymentIntent;
 
         paymentStatus(paymentIntentId)
         .then( (status) => {
