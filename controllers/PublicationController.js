@@ -26,27 +26,27 @@ exports.publicationList = [
 		try {
 			if(Object.keys(req.query).length !== 0) {
 				Publication.search(req.query, function (err, publications) {
-					if(err) {
-						res.send(err);
+					if(err) res.send(err);
+
+					else {
+						if(publications.length > 0){
+							return apiResponse.successResponseWithData(res, "Operation success", publications);
+						}
+
+						return apiResponse.successResponseWithData(res, "Operation success", []);
 					}
-					else if(publications.length > 0){
+				});
+			} else {
+				Publication.find({}, {'_id': 1, 'start_at': 1, 'end_at':1} )
+				.populate('rent', {'_id': 0, 'pictures': 1, 'title': 1, 'city': 1, 'capacity': 1, 'price': 1, 'area': 1})
+				.then((publications)=>{
+					if(publications.length > 0){
 						return apiResponse.successResponseWithData(res, "Operation success", publications);
-					}
-					else{
+					}else{
 						return apiResponse.successResponseWithData(res, "Operation success", []);
 					}
 				});
 			}
-
-			Publication.find({}, {'_id': 1, 'start_at': 1, 'end_at':1} )
-			.populate('rent', {'_id': 0, 'pictures': 1, 'title': 1, 'city': 1, 'capacity': 1, 'price': 1, 'area': 1})
-			.then((publications)=>{
-				if(publications.length > 0){
-					return apiResponse.successResponseWithData(res, "Operation success", publications);
-				}else{
-					return apiResponse.successResponseWithData(res, "Operation success", []);
-				}
-			});
 		} catch (err) {
 			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
