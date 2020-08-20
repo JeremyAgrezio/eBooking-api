@@ -247,14 +247,22 @@ exports.lockOpen = [
 								return apiResponse.notFoundResponse(res, "Lock not exists with this id");
 							} else {
 								const ref = foundLock.serial;
-								const lock = locks.find(lock => { return lock.ref === ref })
 
-								if(lock) {
-									lock.ws.send(ref + ' open');
-									return apiResponse.successResponseWithData(res, "Door Unlocked !");
-								}
+								findLock(ref, function(lock) {
+									if (lock.isLocked) {
+										lock.ws.send(ref + ' open');
+										checkLockStatus(lock.ws, function (isLocked) {
+											if (!isLocked) {
+												lock.isLocked = isLocked;
+												return apiResponse.successResponseWithData(res, "Unlock success !");
+											}
 
-								return apiResponse.ErrorResponse(res, err)
+											return apiResponse.ErrorResponse(res, "Can't unlock door")
+										});
+									} else {
+										return apiResponse.ErrorResponse(res, "Can't unlock door")
+									}
+								});
 							}
 						})
 					})
@@ -306,14 +314,23 @@ exports.lockClose = [
 								return apiResponse.notFoundResponse(res, "Lock not exists with this id");
 							} else {
 								const ref = foundLock.serial;
-								const lock = locks.find(lock => { return lock.ref === ref })
 
-								if(lock) {
-									lock.ws.send(ref + ' close');
-									return apiResponse.successResponseWithData(res, "Door Unlocked !");
-								}
+								findLock(ref, function(lock) {
+									if(!lock.isLocked) {
+										lock.ws.send(ref + ' close');
 
-								return apiResponse.ErrorResponse(res, "Can't lock door")
+										checkLockStatus(lock.ws, function(isLocked) {
+											if (isLocked) {
+												lock.isLocked = isLocked;
+												return apiResponse.successResponseWithData(res, "Lock success !");
+											}
+
+											return apiResponse.ErrorResponse(res, "Can't lock door")
+										});
+									} else {
+										return apiResponse.ErrorResponse(res, "Can't lock door")
+									}
+								});
 							}
 						})
 					})
@@ -325,3 +342,14 @@ exports.lockClose = [
 		}
 	}
 ];
+
+function checkLockStatus (ws, callback) {
+	ws.onmessage = function (event) {
+		let msg = JSON.parse(event.data);
+		callback(msg.state.isLocked);
+	};
+};
+
+function findLock (ref, callback) {
+	callback(locks.find(lock => { return lock.ref === ref }));
+};
