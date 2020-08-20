@@ -105,21 +105,26 @@ console.log('Websocket server listen :')
 // Register lock when connected
 wss.on('connection', function connection(ws) {
   ws.send('Connected to websocket server. Listening:')
-  ws.on('message', function incoming(ref) {
-    let lock = locks.find(lock => {
-      return lock.ref === ref;
-    })
+  ws.on('message', function incoming(message) {
+    let msg = JSON.parse(message);
 
-    if(lock) {
-      lock.ws = ws;
-      lock.ws.isAlive = true;
-      lock.ws.on('pong', heartbeat);
-      console.log(ref + ": updated !");
-    } else {
-      locks.push({ ref: ref, ws: ws })
-      ws.isAlive = true;
-      ws.on('pong', heartbeat);
-      console.log(ref + ": connected !");
+    if(msg.connection) {
+      let ref = msg.connection.serial;
+      let lockState = msg.connection.isLocked;
+      let lock = locks.find(lock => { return lock.ref === ref })
+
+      if(lock) {
+        lock.ws = ws;
+        lock.ws.isAlive = true;
+        lock.ws.on('pong', heartbeat);
+        lock.isLocked = lockState;
+        console.log(ref + ": updated !");
+      } else {
+        locks.push({ ref: ref, ws: ws, isLocked: lockState })
+        ws.isAlive = true;
+        ws.on('pong', heartbeat);
+        console.log(ref + ": connected !");
+      }
     }
   });
 });
