@@ -70,3 +70,5 @@ uploads/
 package-lock.json
 
 .env.prod
+
+controllers/BookController.js
