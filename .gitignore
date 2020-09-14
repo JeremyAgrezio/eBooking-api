@@ -65,8 +65,6 @@ typings/
 
 .idea/
 
-uploads/
-
 package-lock.json
 
 .env.prod
