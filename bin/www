@@ -95,12 +95,12 @@ if(process.env.NODE_ENV !== "dev") {
 // Locks connected
 locks = [];
 
+console.log('Websocket server listen :')
+
 function noop() {}
 function heartbeat() {
   this.isAlive = true;
 }
-
-console.log('Websocket server listen :')
 
 // Register lock when connected
 wss.on('connection', function connection(ws) {
@@ -129,7 +129,7 @@ wss.on('connection', function connection(ws) {
   });
 });
 
-// Detect locks broken connections
+// Broken connections detection
 const interval = setInterval(function ping() {
     locks.forEach(function(lock){
       if (lock.ws.isAlive === false) {
