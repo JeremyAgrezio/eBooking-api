@@ -125,31 +125,30 @@ exports.rentRegister = [
 					owner: req.user,
 				});
 
-			if (!errors.isEmpty()) {
-				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
-			}
-			else if (req.body.associatedLock) {
-				if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
+			Rent.findOne({ associatedLock: req.body.associatedLock }, function (err, foundRent) {
+				if (!errors.isEmpty()) {
+					return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+				}
+				else if (foundRent) {
+					if(foundRent) return apiResponse.unauthorizedResponse(res, "Lock already registered.");
+				}
+				else if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
 				}
-
-				Rent.findOne({ associatedLock: req.body.associatedLock }, function (err, foundRent) {
-					if(foundRent) return apiResponse.unauthorizedResponse(res, "Lock already registered.");
-				});
-			}
-			else {
-				if(req.body.pictures.length < 1){
-					return apiResponse.requiredNotFound(res, "Pictures required");
-				}
-				//Save rent.
-				rent.save(function (err) {
-					if (err) {
-						return apiResponse.ErrorResponse(res, err);
+				else {
+					if(req.body.pictures.length < 1){
+						return apiResponse.requiredNotFound(res, "Pictures required");
 					}
-					let rentData = new RentData(rent);
-					return apiResponse.successResponseWithData(res, "Rent register Success.", rentData);
-				});
-			}
+					//Save rent.
+					rent.save(function (err) {
+						if (err) {
+							return apiResponse.ErrorResponse(res, err);
+						}
+						let rentData = new RentData(rent);
+						return apiResponse.successResponseWithData(res, "Rent register Success.", rentData);
+					});
+				}
+			});
 		} catch (err) {
 			//throw error in json response with status 500.
 			return apiResponse.ErrorResponse(res, err);
@@ -214,40 +213,28 @@ exports.rentUpdate = [
 				}
 
 				Rent.findById(req.params.id, function (err, foundRent) {
-					if (foundRent === null)
-					{
-						return apiResponse.notFoundResponse(res, "Rent not exists with this id");
-					}
-					else if (foundRent.owner.toString() !== req.user._id)
-					{ //Check authorized user
-						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-					}
-					else if (req.body.associatedLock)
-					{
-						if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
+					Rent.findOne({ associatedLock: req.body.associatedLock }, function (err, foundRent) {
+						if (foundRent === null) {
+							return apiResponse.notFoundResponse(res, "Rent not exists with this id");
+						} else if (foundRent.owner.toString() !== req.user._id) { //Check authorized user
+							return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+						} else if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
 							return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
+						} else if (foundRent) {
+							return apiResponse.unauthorizedResponse(res, "Lock already registered.");
+						} else if (req.body.pictures.length < 1) {
+							return apiResponse.requiredNotFound(res, "Pictures required");
 						}
 
-						Rent.findOne({ associatedLock: req.body.associatedLock }, function (err, foundRent) {
-							if (foundRent) return apiResponse.unauthorizedResponse(res, "Lock already registered.");
+						//update rent.
+						Rent.findByIdAndUpdate(req.params.id, rent, {}, function (err) {
+							if (err) {
+								return apiResponse.ErrorResponse(res, err);
+							} else {
+								let rentData = new RentData(rent);
+								return apiResponse.successResponseWithData(res, "Rent update Success.", rentData);
+							}
 						});
-					}
-					else if (req.body.pictures.length < 1)
-					{
-						return apiResponse.requiredNotFound(res, "Pictures required");
-					}
-
-					//update rent.
-					Rent.findByIdAndUpdate(req.params.id, rent, {}, function (err) {
-						if (err)
-						{
-							return apiResponse.ErrorResponse(res, err);
-						}
-						else
-						{
-							let rentData = new RentData(rent);
-							return apiResponse.successResponseWithData(res, "Rent update Success.", rentData);
-						}
 					});
 				});
 			}
