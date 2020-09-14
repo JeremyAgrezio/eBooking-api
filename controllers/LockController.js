@@ -245,25 +245,24 @@ exports.lockOpen = [
 						Lock.findById(rentFound.associatedLock, function (err, foundLock) {
 							if (foundLock === null) {
 								return apiResponse.notFoundResponse(res, "Lock not exists with this id");
-							} else {
-								const ref = foundLock.serial;
-
-								findLock(ref, function(lock) {
-									if (lock.isLocked) {
-										lock.ws.send(ref + ' open');
-										checkLockStatus(lock.ws, function (isLocked) {
-											if (!isLocked) {
-												lock.isLocked = isLocked;
-												return apiResponse.successResponseWithData(res, "Unlock success !");
-											}
-
-											return apiResponse.ErrorResponse(res, "Can't unlock door")
-										});
-									} else {
-										return apiResponse.ErrorResponse(res, "Can't unlock door")
-									}
-								});
 							}
+
+							const ref = foundLock.serial;
+							findLock(ref, function(lock) {
+								if (lock !== undefined && lock.isLocked) {
+									lock.ws.send(ref + ' open');
+									checkLockStatus(lock.ws, function (isLocked) {
+										if (!isLocked) {
+											lock.isLocked = isLocked;
+											return apiResponse.successResponseWithData(res, "Unlock success !");
+										}
+
+										return apiResponse.ErrorResponse(res, "Can't unlock door")
+									});
+								} else {
+									return apiResponse.ErrorResponse(res, "Can't unlock door")
+								}
+							});
 						})
 					})
 				}
@@ -312,26 +311,25 @@ exports.lockClose = [
 						Lock.findById(rentFound.associatedLock, function (err, foundLock) {
 							if (foundLock === null) {
 								return apiResponse.notFoundResponse(res, "Lock not exists with this id");
-							} else {
-								const ref = foundLock.serial;
-
-								findLock(ref, function(lock) {
-									if(!lock.isLocked) {
-										lock.ws.send(ref + ' close');
-
-										checkLockStatus(lock.ws, function(isLocked) {
-											if (isLocked) {
-												lock.isLocked = isLocked;
-												return apiResponse.successResponseWithData(res, "Lock success !");
-											}
-
-											return apiResponse.ErrorResponse(res, "Can't lock door")
-										});
-									} else {
-										return apiResponse.ErrorResponse(res, "Can't lock door")
-									}
-								});
 							}
+
+							const ref = foundLock.serial;
+							findLock(ref, function(lock) {
+								if(lock !== undefined && !lock.isLocked) {
+									lock.ws.send(ref + ' close');
+
+									checkLockStatus(lock.ws, function(isLocked) {
+										if (isLocked) {
+											lock.isLocked = isLocked;
+											return apiResponse.successResponseWithData(res, "Lock success !");
+										}
+
+										return apiResponse.ErrorResponse(res, "Can't lock door")
+									});
+								} else {
+									return apiResponse.ErrorResponse(res, "Can't lock door")
+								}
+							});
 						})
 					})
 				}
@@ -345,7 +343,7 @@ exports.lockClose = [
 
 function checkLockStatus (ws, callback) {
 	ws.onmessage = function (event) {
-		let msg = JSON.parse(event.data);
+		const msg = JSON.parse(event.data);
 		callback(msg.state.isLocked);
 	};
 };
