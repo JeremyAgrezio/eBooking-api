@@ -25,6 +25,15 @@ function RentData(data) {
 	this.createdAt = data.createdAt;
 }
 
+function isLockAvailable (lock) {
+	try {
+		return Rent.findOne({ associatedLock: lock }).exec();
+	} catch (err) {
+		return err;
+	}
+};
+
+
 /**
  * Rent List.
  *
@@ -63,7 +72,7 @@ exports.rentDetail = [
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Rent.findOne({_id: req.params.id,owner: req.user._id}).then((rent)=>{
+			Rent.findOne({_id: req.params.id, owner: req.user._id}).then((rent)=>{
 				if(rent !== null){
 					let rentData = new RentData(rent);
 					return apiResponse.successResponseWithData(res, "Operation success", rentData);
@@ -125,29 +134,24 @@ exports.rentRegister = [
 					owner: req.user,
 				});
 
-			Rent.findOne({ associatedLock: req.body.associatedLock }, function (err, foundRent) {
-				if (!errors.isEmpty()) {
-					return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
-				}
-				else if (foundRent) {
-					if(foundRent) return apiResponse.unauthorizedResponse(res, "Lock already registered.");
-				}
-				else if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
-					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
-				}
-				else {
-					if(req.body.pictures.length < 1){
-						return apiResponse.requiredNotFound(res, "Pictures required");
-					}
-					//Save rent.
-					rent.save(function (err) {
-						if (err) {
-							return apiResponse.ErrorResponse(res, err);
-						}
-						let rentData = new RentData(rent);
-						return apiResponse.successResponseWithData(res, "Rent register Success.", rentData);
-					});
-				}
+			if (!errors.isEmpty()) {
+				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+			} else if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
+				return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
+			} else if (req.body.pictures.length < 1) {
+				return apiResponse.requiredNotFound(res, "Pictures required");
+			}
+
+			isLockAvailable(req.body.associatedLock).then(async result => {
+				if (result) return apiResponse.unauthorizedResponse(res, "Lock already registered.");
+
+				//Save rent.
+				rent.save(function (err) {
+					if (err) return apiResponse.ErrorResponse(res, err);
+
+					let rentData = new RentData(rent);
+					return apiResponse.successResponseWithData(res, "Rent register Success.", rentData);
+				});
 			});
 		} catch (err) {
 			//throw error in json response with status 500.
@@ -189,8 +193,9 @@ exports.rentUpdate = [
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
-			const rent = new Rent(
-				{ 	title: req.body.title,
+			const rent =
+				{
+					title: req.body.title,
 					description: req.body.description,
 					capacity: req.body.capacity,
 					price: req.body.price,
@@ -200,9 +205,9 @@ exports.rentUpdate = [
 					city: req.body.city,
 					country: req.body.country,
 					postalCode: req.body.postalCode,
-					associatedLock: req.body.associatedLock ? req.body.associatedLock : null,
-					_id:req.params.id
-				});
+					associatedLock: req.body.associatedLock || null,
+					owner: req.user,
+				};
 
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
@@ -212,22 +217,25 @@ exports.rentUpdate = [
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 				}
 
-				Rent.findById(req.params.id, function (err, foundRent) {
-					Rent.findOne({ associatedLock: req.body.associatedLock }, function (err, foundRent) {
-						if (foundRent === null) {
-							return apiResponse.notFoundResponse(res, "Rent not exists with this id");
-						} else if (foundRent.owner.toString() !== req.user._id) { //Check authorized user
-							return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
-						} else if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
-							return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
-						} else if (foundRent) {
+				Rent.findById(req.params.id, (err, foundRent) => {
+					if (foundRent === null) {
+						return apiResponse.notFoundResponse(res, "Rent update error");
+					} else if (foundRent.owner.toString() !== req.user._id) { //Check authorized user
+						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+					} else if (!mongoose.Types.ObjectId.isValid(req.body.associatedLock)) {
+						return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid Lock ID");
+					} else if (req.body.pictures.length < 1) {
+						return apiResponse.requiredNotFound(res, "Pictures required");
+					}
+
+					isLockAvailable(req.body.associatedLock).then(async result => {
+						if (result.id != foundRent.id) {
 							return apiResponse.unauthorizedResponse(res, "Lock already registered.");
-						} else if (req.body.pictures.length < 1) {
-							return apiResponse.requiredNotFound(res, "Pictures required");
 						}
 
-						//update rent.
-						Rent.findByIdAndUpdate(req.params.id, rent, {}, function (err) {
+						// Update rent.
+						Object.assign(foundRent, rent);
+						await foundRent.save(function (err) {
 							if (err) {
 								return apiResponse.ErrorResponse(res, err);
 							} else {
@@ -235,7 +243,7 @@ exports.rentUpdate = [
 								return apiResponse.successResponseWithData(res, "Rent update Success.", rentData);
 							}
 						});
-					});
+					})
 				});
 			}
 		} catch (err) {
@@ -259,7 +267,7 @@ exports.rentDelete = [
 			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 		}
 		try {
-			Rent.findById(req.params.id, function (err, foundRent) {
+			Rent.findById(req.params.id, async (err, foundRent) => {
 				if(foundRent === null){
 					return apiResponse.notFoundResponse(res,"Rent not exists with this id");
 				}else{
@@ -268,10 +276,8 @@ exports.rentDelete = [
 						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 					}
 
-					Rent.findByIdAndRemove(req.params.id,function (err) { //delete rent.
-						if (err) {
-							return apiResponse.ErrorResponse(res, err);
-						}
+					await foundRent.remove(err => {
+						if (err) return apiResponse.ErrorResponse(res, err);
 
 						return apiResponse.successResponse(res,"Rent delete Success.");
 					});
