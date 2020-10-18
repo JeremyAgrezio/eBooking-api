@@ -21,7 +21,7 @@ function PublicationData(data) {
  * @returns {Object}
  */
 exports.publicationList = [
-	//auth,
+	auth,
 	function (req, res) {
 		try {
 			if(Object.keys(req.query).length !== 0) {
@@ -62,7 +62,7 @@ exports.publicationList = [
  * @returns {Object}
  */
 exports.publicationDetail = [
-	//auth,
+	auth,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});

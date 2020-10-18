@@ -341,6 +341,56 @@ exports.lockClose = [
 	}
 ];
 
+/**
+ * Lock status.
+ *
+ * @param {string} reservation
+ *
+ * @returns {Object}
+ */
+exports.lockStatus = [
+	auth,
+	check("reservation", "Reservation must not be empty.").isLength({ min: 1 }).trim(),
+	body("*").escape(),
+	function (req, res) {
+		const reservation = req.body.reservation;
+
+		if(!mongoose.Types.ObjectId.isValid(reservation)){
+			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
+		}
+		try {
+			Reservation.findById(reservation, function (err, foundReservation) {
+				if(foundReservation === null){
+					return apiResponse.notFoundResponse(res,"Reservation not exists with this id");
+				}else if (foundReservation.tenant.toString() !== req.user._id){ //Check authorized user
+					return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
+				}else {
+
+					Rent.findOne({'reservations._id': foundReservation._id}, function (err, rentFound) {
+						if (err) return apiResponse.ErrorResponse(res, err);
+
+						Lock.findById(rentFound.associatedLock, function (err, foundLock) {
+							if (foundLock === null) {
+								return apiResponse.notFoundResponse(res, "Lock not exists with this id");
+							}
+
+							const ref = foundLock.serial;
+							findLock(ref, function(lock) {
+								checkLockStatus(lock.ws, function(isLocked) {
+									return apiResponse.successResponseWithData(res, isLocked);
+								});
+							});
+						})
+					})
+				}
+			});
+		} catch (err) {
+			//throw error in json response with status 500.
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
 function checkLockStatus (ws, callback) {
 	ws.onmessage = function (event) {
 		const msg = JSON.parse(event.data);

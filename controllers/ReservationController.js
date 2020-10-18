@@ -149,6 +149,7 @@ exports.reservationRegister = [
 			const errors = validationResult(req);
 			const reservation_start = new Date(req.body.start_at)
 			const reservation_end = new Date(req.body.end_at)
+			const totalDays = (reservation_end.getTime() - reservation_start.getTime()) / (1000 * 3600 * 24);
 
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
@@ -168,8 +169,6 @@ exports.reservationRegister = [
 					else if (reservation_start >= reservation_end){
 						return apiResponse.unauthorizedResponse(res, "End date must be superior to start date");
 					}
-
-					const totalDays = (reservation_end.getTime() - reservation_start.getTime()) / (1000 * 3600 * 24);
 
 					Rent.findOne(
 						{

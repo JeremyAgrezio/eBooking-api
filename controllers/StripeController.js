@@ -198,15 +198,16 @@ async function reservationProceed(res, paymentIntentId, callback) {
                         _id: foundPublication.rent,
                         reservations: {
                             //Check if any of the dates the rent has been reserved for overlap with the requested dates
-                            $not: {
-                                $elemMatch: {from: {$lt: reservation_end}, to: {$gt: reservation_start}}
-                            }
+                            $not: { $elemMatch: {from: {$lt: reservation_end}, to: {$gt: reservation_start}} }
                         }
                     },
                     (err, foundRent) => {
                         if (foundRent === null) {
                             return apiResponse.notFoundResponse(res, "Rent is already reserved at this dates");
                         }
+
+                        // Html email body
+                        const html = emails.reservationRegister(foundRent.title, reservation_start, reservation_end, foundRent.price)
 
                         const reservation = new Reservation(
                             { 	publication: publicationId,
@@ -239,9 +240,6 @@ async function reservationProceed(res, paymentIntentId, callback) {
                                 if (err) {
                                     return apiResponse.ErrorResponse(res, err);
                                 }
-
-                                // Html email body
-                                const html = emails.reservationRegister(foundRent.title, reservation_start, reservation_end, foundRent.price)
 
                                 mailer.send(
                                     constants.confirmEmails.from,

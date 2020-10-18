@@ -21,6 +21,4 @@ const storage = multer.diskStorage({
 	}
 });
 
-// module.exports = multer({storage: storage}).single('file');
-// module.exports = multer({storage: storage}).array('file', 5);
 module.exports = multer({storage: storage}).any();
